@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react'
 import Search from '../../../components/user/home/Search'
 import ProductCard from '../../../components/user/home/ProductCards';
 import { View, StyleSheet } from 'react-native';
+import { useResultContext } from '../contexts/ContextProvider'
 
 export default function Home() {
-
+    const { results } = useResultContext()
+    console.log("Result ====> ", results)
     const [data, setData] = useState({})
 
     useEffect(async () => {
