@@ -1,5 +1,4 @@
 import React, { useState, createContext, useContext } from 'react';
-// import { StyleSheet, Text, View } from 'react-native'
 
 const ResultContext = createContext();
 
