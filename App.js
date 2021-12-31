@@ -1,13 +1,13 @@
 import { NavigationContainer } from '@react-navigation/native';
 import RootStackNavigator from './navigators/RootStackNavigator';
-import { ResultContextProvider } from './contexts/ContextProvider';
+import { ContextProvider } from './contexts/ContextProvider';
 
 export default App = () => {
   return (
-    <ContextProvider>
-      <NavigationContainer>
+    <NavigationContainer>
+      <ContextProvider>
         <RootStackNavigator />
-      </NavigationContainer>
-    </ContextProvider>
+      </ContextProvider>
+    </NavigationContainer>
   )
 }
