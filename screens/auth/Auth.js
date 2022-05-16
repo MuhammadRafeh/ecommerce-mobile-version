@@ -31,25 +31,31 @@ const Login = props => {
 
                         <Steps
                             icon={'ios-document-outline'}
-                            title={'Register yourself'}
-                            description={'Get register on this platform so then you can shop amazing offers and products.'}
+                            title={'Complete your Profile'}
+                            description={
+                                'Tell about your stiches history and skills to global audience and start earning more.'
+                            }
                         />
                         <Steps
                             icon={'paper-plane-outline'}
-                            title={'Order the product'}
-                            description={"Order your favorite product online through this app with in your area."}
+                            title={'Deliver your stiched work'}
+                            description={
+                                "We'll deliver offline after you have done with the client's order."
+                            }
                         />
                         <Steps
                             icon={'cloud-done-outline'}
-                            title={'Take your Order'}
-                            description={"We'll deliver your order at your door steps and make payment door to door."}
+                            title={'Get paid'}
+                            description={
+                                "Get your payment through easypaisa or door to door. It's that simple."
+                            }
                         />
                     </View>
 
                     {/* <Button title={'Continue'} style={{ marginTop: 46 }} onPress={() => props.navigation.navigate('SignupModel', { fromSeller: true })} /> */}
                     <View style={{ flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center', top: -10, marginTop: 60 }}>
                         <Card style={{ width: '44.4%' }} text={'Continue as User'} image={require('../../assets/images/user.png')} onPress={() => props.navigation.navigate('Login')} />
-                        <Card style={{ width: '44.4%' }} text={'Continue as Admin'} image={require('../../assets/images/admin.png')} onPress={() => props.navigation.navigate('Login', { fromAdmin: true })} />
+                        <Card style={{ width: '44.4%' }} text={'Continue as Tailor'} image={require('../../assets/images/admin.png')} onPress={() => props.navigation.navigate('Login', { fromAdmin: true })} />
                     </View>
 
                 </ScrollView>
