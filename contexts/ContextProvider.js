@@ -3,6 +3,8 @@ import { items as defaultItems } from '../data/items';
 import template from '../template/initialTemplate';
 import { gql } from 'graphql-request';
 import graphcms from '../graphCMS/graphCMS';
+import Category from '../models/category';
+import Item from '../models/item';
 
 const AuthContext = createContext();
 
@@ -19,39 +21,40 @@ query MyQuery {
       }
       name
       price
+      excerpt
     }
   }
 }`;
 
 export const ContextProvider = ({ children }) => {
 
-    const [varieties, setVarieties] = useState([]);
     const getData = async () => {
         const { varieties } = await graphcms.request(QUERY);
-        setVarieties(varieties)
-        console.log(varieties, 'asdasd')
+        const items = varieties.map(varieties => {
+            return (
+                new Category(
+                    varieties.name,
+                    varieties.products.map(product => (
+                        new Item(
+                            product.id,
+                            product.name,
+                            product.excerpt,
+                            product.price,
+                            product?.image?.url,
+                            []
+                        )
+                    ))
+                )
+            )
+        })
+        setItems({ lastId: 98989, categories: items })
+        setSavedItems({ lastId: 98989, categories: items })
     };
 
     useEffect(() => {
         getData();
     }, []);
 
-    const fetchData = async () => {
-        // const data = await checkAndReadFile();
-        // if (!data) {
-        //     return;
-        // }
-        // setAuth(data.auth);
-        // setCart(data.cart);
-        // setAllData(data);
-        // setOrders(data.orders)
-        // setFavoriteItems(data.favoriteItems)
-        // setItems(data.items)
-        // setWeeklyDeals(data.weeklyDeals)
-    }
-    useEffect(() => {
-        fetchData();
-    }, [])
     const [auth, setAuth] = useState(template.auth);
 
     const [cart, setCart] = useState([]);
