@@ -6,6 +6,33 @@ import colors from '../../../constants/colors';
 import { useEcommerceContext } from '../../../contexts/ContextProvider';
 import SortingButton from '../../../components/user/home/SortingButton';
 
+import { gql } from 'graphql-request';
+import graphcms from '../../../graphCMS/graphCMS';
+
+const QUERY = gql`
+query MyQuery {
+  categories{
+    id
+    name
+    collections {
+      id
+      name
+      varieties {
+        id
+        name
+        products {
+          id
+          name
+          price
+          description
+          excerpt
+        }
+      }
+    }
+  }
+}`;
+
+
 export default function Home(props) {
     const { items } = useEcommerceContext();
 
