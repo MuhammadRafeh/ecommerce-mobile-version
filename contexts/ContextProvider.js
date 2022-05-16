@@ -5,6 +5,7 @@ import { gql } from 'graphql-request';
 import graphcms from '../graphCMS/graphCMS';
 import Category from '../models/category';
 import Item from '../models/item';
+import checkAndReadFile from '../functions/checkAndReadFile';
 
 const AuthContext = createContext();
 
@@ -29,6 +30,17 @@ query MyQuery {
 export const ContextProvider = ({ children }) => {
 
     const getData = async () => {
+        const data = await checkAndReadFile();
+        if (!data) {
+            return;
+        }
+        setAuth(data.auth);
+        setCart(data.cart);
+        setAllData(data);
+        setOrders(data.orders)
+        setFavoriteItems(data.favoriteItems)
+        setWeeklyDeals(data.weeklyDeals)
+
         const { varieties } = await graphcms.request(QUERY);
         const items = varieties.map(varieties => {
             return (
