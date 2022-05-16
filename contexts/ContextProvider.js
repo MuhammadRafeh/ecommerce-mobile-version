@@ -1,27 +1,60 @@
 import React, { useState, createContext, useContext, useEffect } from 'react';
-import checkAndReadFile from '../functions/checkAndReadFile';
 import { items as defaultItems } from '../data/items';
 import template from '../template/initialTemplate';
+import { gql } from 'graphql-request';
+import graphcms from '../graphCMS/graphCMS';
+import Category from '../models/category';
+import Item from '../models/item';
 
 const AuthContext = createContext();
 
-export const ContextProvider = ({ children }) => {
-    const fetchData = async () => {
-        const data = await checkAndReadFile();
-        if (!data) {
-            return;
-        }
-        setAuth(data.auth);
-        setCart(data.cart);
-        setAllData(data);
-        setOrders(data.orders)
-        setFavoriteItems(data.favoriteItems)
-        setItems(data.items)
-        setWeeklyDeals(data.weeklyDeals)
+const QUERY = gql`
+query MyQuery {
+  varieties {
+    id
+    name
+    products {
+      id
+      image {
+        id
+        url
+      }
+      name
+      price
+      excerpt
     }
+  }
+}`;
+
+export const ContextProvider = ({ children }) => {
+
+    const getData = async () => {
+        const { varieties } = await graphcms.request(QUERY);
+        const items = varieties.map(varieties => {
+            return (
+                new Category(
+                    varieties.name,
+                    varieties.products.map(product => (
+                        new Item(
+                            product.id,
+                            product.name,
+                            product.excerpt,
+                            product.price,
+                            product?.image?.url,
+                            []
+                        )
+                    ))
+                )
+            )
+        })
+        setItems({ lastId: 98989, categories: items })
+        setSavedItems({ lastId: 98989, categories: items })
+    };
+
     useEffect(() => {
-        fetchData();
-    }, [])
+        getData();
+    }, []);
+
     const [auth, setAuth] = useState(template.auth);
 
     const [cart, setCart] = useState([]);

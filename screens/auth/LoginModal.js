@@ -46,7 +46,7 @@ const LoginModal = props => {
                 <View style={{ marginBottom: 10 }}>
                     <Text style={{ fontWeight: 'bold', fontSize: 20, color: 'black' }}>
                         {
-                            fromAdmin ? 'Welcome Admin' : 'Welcome back'
+                            fromAdmin ? 'Welcome Tailor' : 'Welcome back'
                         }
                     </Text>
                 </View>
@@ -183,7 +183,7 @@ const LoginModal = props => {
                     ) : (
                         <View style={{ marginBottom: 24, alignItems: 'center', marginLeft: 8 }}>
                             <Text style={{ color: colors.primary, fontFamily: 'italic' }}>
-                                Admin! we need your help...
+                                Tailor! we need your help...
                             </Text>
                         </View>
                     )
