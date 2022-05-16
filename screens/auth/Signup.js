@@ -5,7 +5,7 @@ import CloseButton from '../../components/UI/CloseButton';
 import FullScreenIndicator from '../../components/UI/FullScreenIndicator';
 import colors from '../../constants/colors';
 import { useEcommerceContext } from '../../contexts/ContextProvider';
-import checkAndWriteFile from '../../functions/checkAndWriteFile';
+// import checkAndWriteFile from '../../functions/checkAndWriteFile';
 import validateEmail from '../../functions/validateEmail';
 import validatePassword from '../../functions/validatePassword';
 import validateUsername from '../../functions/validateUsername';
@@ -60,7 +60,7 @@ const Signup = props => {
             }
             Alert.alert('Operation Success', 'You can now Login!', [{ text: 'Ok', style: 'destructive', onPress: () => props.navigation.goBack() }])
 
-            await checkAndWriteFile(newData)
+            // await checkAndWriteFile(newData)
             setAllData(newData);
 
             setIsLoading(false);

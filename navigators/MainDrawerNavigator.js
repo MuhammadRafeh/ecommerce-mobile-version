@@ -22,7 +22,7 @@ import { useEcommerceContext } from '../contexts/ContextProvider';
 import Home from '../screens/user/home/Home';
 
 import template from '../template/initialTemplate';
-import checkAndWriteFile from '../functions/checkAndWriteFile';
+// import checkAndWriteFile from '../functions/checkAndWriteFile';
 
 function CustomDrawerContent(props) {
     const { allData, setAllData, auth, setAuth } = useEcommerceContext();
@@ -50,7 +50,7 @@ function CustomDrawerContent(props) {
                         auth: newAuth
                     };
 
-                    await checkAndWriteFile(newData);
+                    // await checkAndWriteFile(newData);
                     setAuth(newAuth)
                     setAllData(newData);
 

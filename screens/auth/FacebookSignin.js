@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import * as Facebook from 'expo-facebook';
 import { useEcommerceContext } from '../../contexts/ContextProvider';
-import checkAndWriteFile from '../../functions/checkAndWriteFile';
+// import checkAndWriteFile from '../../functions/checkAndWriteFile';
 import { Ionicons } from '@expo/vector-icons';
 
 const FacebookSignin = propss => {
@@ -37,10 +37,10 @@ const FacebookSignin = propss => {
                     ...allData,
                     auth: newAuth
                 })
-                await checkAndWriteFile({
-                    ...allData,
-                    auth: newAuth
-                })
+                // await checkAndWriteFile({
+                //     ...allData,
+                //     auth: newAuth
+                // })
 
 
             } else {

@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import * as Google from "expo-google-app-auth";
 import { useEcommerceContext } from '../../contexts/ContextProvider';
-import checkAndWriteFile from '../../functions/checkAndWriteFile';
+// import checkAndWriteFile from '../../functions/checkAndWriteFile';
 import { Ionicons } from '@expo/vector-icons';
 
 const GoogleSignin = props => {
@@ -35,10 +35,10 @@ const GoogleSignin = props => {
                     auth: newAuth
                 })
 
-                await checkAndWriteFile({
-                    ...allData,
-                    auth: newAuth
-                })
+                // await checkAndWriteFile({
+                //     ...allData,
+                //     auth: newAuth
+                // })
             }
         }
         catch (error) {

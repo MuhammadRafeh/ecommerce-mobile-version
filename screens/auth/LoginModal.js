@@ -8,7 +8,7 @@ import colors from '../../constants/colors';
 import { useEcommerceContext } from '../../contexts/ContextProvider';
 import GoogleSignin from './GoogleSignin'
 import FacebookSignin from './FacebookSignin'
-import checkAndWriteFile from '../../functions/checkAndWriteFile';
+// import checkAndWriteFile from '../../functions/checkAndWriteFile';
 
 const LoginModal = props => {
     const { setAuth, auth, allData, setAllData } = useEcommerceContext();
@@ -166,10 +166,10 @@ const LoginModal = props => {
                         auth: newAuth
                     })
                     setAuth(newAuth)  //TODO
-                    await checkAndWriteFile({
-                        ...allData,
-                        auth: newAuth
-                    })
+                    // await checkAndWriteFile({
+                    //     ...allData,
+                    //     auth: newAuth
+                    // })
 
                 }} />
 

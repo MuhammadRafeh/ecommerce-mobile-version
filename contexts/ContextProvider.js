@@ -1,23 +1,53 @@
 import React, { useState, createContext, useContext, useEffect } from 'react';
-import checkAndReadFile from '../functions/checkAndReadFile';
 import { items as defaultItems } from '../data/items';
 import template from '../template/initialTemplate';
+import { gql } from 'graphql-request';
+import graphcms from '../graphCMS/graphCMS';
 
 const AuthContext = createContext();
 
+const QUERY = gql`
+query MyQuery {
+  varieties {
+    id
+    name
+    products {
+      id
+      image {
+        id
+        url
+      }
+      name
+      price
+    }
+  }
+}`;
+
 export const ContextProvider = ({ children }) => {
+
+    const [varieties, setVarieties] = useState([]);
+    const getData = async () => {
+        const { varieties } = await graphcms.request(QUERY);
+        setVarieties(varieties)
+        console.log(varieties, 'asdasd')
+    };
+
+    useEffect(() => {
+        getData();
+    }, []);
+
     const fetchData = async () => {
-        const data = await checkAndReadFile();
-        if (!data) {
-            return;
-        }
-        setAuth(data.auth);
-        setCart(data.cart);
-        setAllData(data);
-        setOrders(data.orders)
-        setFavoriteItems(data.favoriteItems)
-        setItems(data.items)
-        setWeeklyDeals(data.weeklyDeals)
+        // const data = await checkAndReadFile();
+        // if (!data) {
+        //     return;
+        // }
+        // setAuth(data.auth);
+        // setCart(data.cart);
+        // setAllData(data);
+        // setOrders(data.orders)
+        // setFavoriteItems(data.favoriteItems)
+        // setItems(data.items)
+        // setWeeklyDeals(data.weeklyDeals)
     }
     useEffect(() => {
         fetchData();
