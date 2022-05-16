@@ -108,32 +108,58 @@ export const Card = (props) => {
     return (
         <View style={styles.cardStyle}>
             <View style={styles.cardHeadingStyle}>
-                <Text style={styles.cardHeadingTextStyle}>{item.name} Products</Text>
+                <Text style={styles.cardHeadingTextStyle}>{item.name}</Text>
             </View>
             <View style={{ flexDirection: 'row', width: '100%' }}>
                 <ScrollView horizontal={!isAdmin} showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingRight: 20 }}>
                     {filterItems.map((product) => (
-                        <TouchableOpacity key={product.id} style={styles.card} onPress={() => navigation.navigate('ProductDetails', { item: product, category: item.name })}>
-                            <Image source={{ uri: product.uri }} style={styles.productImage} />
-                            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                <Text style={{ color: '#494949', fontWeight: '200', fontFamily: 'text-bold', fontSize: 16.5 }} adjustsFontSizeToFit={true} numberOfLines={1}>
-                                    {product.name}
-                                </Text>
-                            </View>
-                            <View style={styles.childViewTextStyle}>
-                                <Text style={{ color: 'grey', fontFamily: 'italic', fontSize: 15 }}>
-                                    {product.detail}
-                                </Text>
-                            </View>
-                            <Text style={{ color: colors.primary, fontWeight: '200' }}>${product.price} </Text>
-                            <TouchableOpacity style={styles.button} onPress={async () => {
-                                const cartIndex = cart.findIndex(cartItem => cartItem.username == auth.loginUserInfo.username);
-                                if (cartIndex == -1) {
-                                    const newCart = [...cart, new Cart(
+                        <>
+                            <TouchableOpacity style={{ width: 180, marginHorizontal: 10, marginTop: 14 }} onPress={() => navigation.navigate('ProductDetails', { item: product, category: item.name })}>
+                                <View style={styles.moreProductImageView}>
+                                    <Image
+                                        style={{ flex: 1 }}
+                                        source={{
+                                            uri: product.uri,
+                                        }}
+                                    />
+                                </View>
+                                <View style={{ marginTop: 8 }}>
+                                    <Text style={styles.moreProductName}>
+                                        {product.name}
+                                    </Text>
+                                    <View style={styles.moreProductPriceView}>
+                                        <Text style={styles.moreProductPrice}>
+                                            ${product.price}
+                                        </Text>
+                                    </View>
+                                </View>
+                                <TouchableOpacity style={styles.moreProductBuyButton} onPress={async () => {
+                                    const cartIndex = cart.findIndex(cartItem => cartItem.username == auth.loginUserInfo.username);
+                                    if (cartIndex == -1) {
+                                        const newCart = [...cart, new Cart(
+                                            auth.loginUserInfo.username,
+                                            product.price,
+                                            [new CartItem(product.id, product.name, product.detail, product.price, product.uri, item.name, 1, product.price)]
+                                        )]
+                                        setCart(newCart);
+                                        const newData = {
+                                            ...allData,
+                                            cart: newCart
+                                        }
+                                        await checkAndWriteFile(newData);
+                                        setAllData(newData)
+                                        return;
+                                    }
+                                    const index = cart[cartIndex].items.findIndex(cartItem => cartItem.id == product.id);
+                                    if (index != -1) return;
+
+                                    const newCart = [...cart]
+                                    newCart.splice(cartIndex, 1, new Cart(
                                         auth.loginUserInfo.username,
                                         product.price,
-                                        [new CartItem(product.id, product.name, product.detail, product.price, product.uri, item.name, 1, product.price)]
-                                    )]
+                                        [...cart[cartIndex].items, new CartItem(product.id, product.name, product.detail, product.price, product.uri, item.name, 1, product.price)]
+                                    ))
+
                                     setCart(newCart);
                                     const newData = {
                                         ...allData,
@@ -141,29 +167,11 @@ export const Card = (props) => {
                                     }
                                     await checkAndWriteFile(newData);
                                     setAllData(newData)
-                                    return;
-                                }
-                                const index = cart[cartIndex].items.findIndex(cartItem => cartItem.id == product.id);
-                                if (index != -1) return;
-
-                                const newCart = [...cart]
-                                newCart.splice(cartIndex, 1, new Cart(
-                                    auth.loginUserInfo.username,
-                                    product.price,
-                                    [...cart[cartIndex].items, new CartItem(product.id, product.name, product.detail, product.price, product.uri, item.name, 1, product.price)]
-                                ))
-
-                                setCart(newCart);
-                                const newData = {
-                                    ...allData,
-                                    cart: newCart
-                                }
-                                await checkAndWriteFile(newData);
-                                setAllData(newData)
-                            }}>
-                                <Text style={{ color: colors.primary, fontFamily: 'bold' }}>Add to cart</Text>
+                                }}>
+                                    <Text style={styles.moreProductBuyButtonText}>Add to cart</Text>
+                                </TouchableOpacity>
                             </TouchableOpacity>
-                        </TouchableOpacity>
+                        </>
                     ))}
                     {
                         filterItems.length == 0 && (
@@ -252,9 +260,43 @@ const styles = StyleSheet.create({
         color: '#606070',
         fontSize: 16,
         fontWeight: 'bold',
+        // marginBottom: 10
     },
     childViewTextStyle: {
         flexDirection: 'row',
         justifyContent: 'space-between',
     },
+    moreProductImageView: {
+        flex: 1,
+        height: 240,
+        backgroundColor: '#fff',
+        borderRadius: 4,
+        overflow: 'hidden',
+    },
+    moreProductName: {
+        fontFamily: 'light',
+        fontSize: 16,
+    },
+    moreProductPriceView: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginTop: 8,
+    },
+    moreProductPrice: {
+        fontSize: 16,
+        fontFamily: 'light',
+    },
+    moreProductBuyButton: {
+        backgroundColor: colors.primary,
+        marginTop: 10,
+        paddingVertical: 8,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    moreProductBuyButtonText: {
+        color: '#fff',
+        fontFamily: 'light',
+        fontSize: 18,
+    }
 })
