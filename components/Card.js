@@ -114,7 +114,7 @@ export const Card = (props) => {
                 <ScrollView horizontal={!isAdmin} showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingRight: 20 }}>
                     {filterItems.map((product) => (
                         <>
-                            <TouchableOpacity style={{ width: 180, marginHorizontal: 10, marginTop: 14 }} onPress={() => navigation.navigate('ProductDetails', { item: product, category: item.name })}>
+                            <TouchableOpacity key={product.id} style={{ width: 180, marginHorizontal: 10, marginTop: 14 }} onPress={() => navigation.navigate('ProductDetails', { item: product, category: item.name })}>
                                 <View style={styles.moreProductImageView}>
                                     <Image
                                         style={{ flex: 1 }}
@@ -198,7 +198,7 @@ const styles = StyleSheet.create({
     cardStyle: {
         backgroundColor: colors.secondary,
         paddingVertical: 10,
-        marginTop: 0
+        // marginTop: 20
     },
     Acard: {
         marginVertical: 10,
@@ -293,10 +293,11 @@ const styles = StyleSheet.create({
         paddingVertical: 8,
         alignItems: 'center',
         justifyContent: 'center',
+        borderRadius: 4
     },
     moreProductBuyButtonText: {
         color: '#fff',
-        fontFamily: 'light',
+        fontFamily: 'Lato-Black',
         fontSize: 18,
     }
 })
