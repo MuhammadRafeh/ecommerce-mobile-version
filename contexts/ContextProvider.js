@@ -81,12 +81,12 @@ export const ContextProvider = ({ children }) => {
 
     const [items, setItems] = useState({
         lastId: 16,
-        categories: defaultItems
+        categories: []
     });
 
     const [savedItems, setSavedItems] = useState({
         lastId: 16,
-        categories: defaultItems
+        categories: []
     });
 
     const [priceFilter, setPriceFilter] = useState('nothing');
