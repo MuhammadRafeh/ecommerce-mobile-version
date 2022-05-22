@@ -72,7 +72,7 @@ const Filters = props => {
                             key={index}
                         >
                             <FilterSwitch
-                                label={`Hide ${name} Food`}
+                                label={`Hide ${name}`}
                                 state={filter.includes(name)}
                                 onChange={setFilters.bind(null, name)} />
                         </View>

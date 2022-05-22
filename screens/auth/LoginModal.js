@@ -53,7 +53,7 @@ const LoginModal = props => {
                 <View style={{ marginBottom: fromAdmin ? 90 : 30 }}>
                     <Text style={{ letterSpacing: -0.2, fontSize: 14, color: 'grey' }} adjustsFontSizeToFit={true} numberOfLines={1}>
                         {
-                            fromAdmin ? 'Sign in back in order to handle your different orders.' : 'Sign in to e-commerce to pick up exactly where you left off.'
+                            fromAdmin ? 'Sign in back in order to handle your different orders.' : "Sign in to AR'S Attire to pick up exactly where you left off."
                         }
                     </Text>
                 </View>
