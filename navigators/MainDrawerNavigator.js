@@ -24,6 +24,7 @@ import Home from '../screens/user/home/Home';
 import template from '../template/initialTemplate';
 import checkAndWriteFile from '../functions/checkAndWriteFile';
 import Tailors from '../screens/user/Tailors/Tailors';
+import Measurements from '../screens/user/Measurements/Measurements';
 
 function CustomDrawerContent(props) {
     const { allData, setAllData, auth, setAuth } = useEcommerceContext();
@@ -134,6 +135,10 @@ export default function MainDrawerNavigator() {
                             headerStyle: { borderBottomWidth: 0, elevation: 0, backgroundColor: colors.offWhite },
                         })} />
                         <Drawer.Screen name="Tailors" component={Tailors} options={({ navigation }) => ({
+                            drawerIcon: ({ color, size }) => <Ionicons size={size} color={color} name={'md-star'} />,
+                            headerLeft: () => <HeaderButton navigation={navigation} />,
+                        })} />
+                        <Drawer.Screen name="Measurements" component={Measurements} options={({ navigation }) => ({
                             drawerIcon: ({ color, size }) => <Ionicons size={size} color={color} name={'md-star'} />,
                             headerLeft: () => <HeaderButton navigation={navigation} />,
                         })} />
