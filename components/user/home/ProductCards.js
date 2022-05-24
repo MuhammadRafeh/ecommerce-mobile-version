@@ -1,18 +1,18 @@
 import React from 'react';
-import { SafeAreaView, View, StyleSheet, ScrollView } from 'react-native';
+import { SafeAreaView, View, StyleSheet, ScrollView, FlatList } from 'react-native';
 import colors from '../../../constants/colors';
 import { Card } from '../../Card'
 
 const ProductCard = ({ data, navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView>
-        <View>
-          {
-            data.map((item, index) => <Card key={index} item={item} isAdmin={false} navigation={navigation} />)
-          }
-        </View>
-      </ScrollView>
+      <FlatList
+        data={data}
+        keyExtractor={(data) => data.id}
+        renderItem={({ item }) => (
+          <Card item={item} isAdmin={false} navigation={navigation} />
+        )}
+      />
     </SafeAreaView>
   );
 };
