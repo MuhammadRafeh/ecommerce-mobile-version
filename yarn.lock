@@ -4344,11 +4344,6 @@ nanomatch@^1.2.9:
     snapdragon "^0.8.1"
     to-regex "^3.0.1"
 
-native-forms@^1.7.3:
-  version "1.7.3"
-  resolved "https://registry.yarnpkg.com/native-forms/-/native-forms-1.7.3.tgz#eafec2c61cb374f19bf6b206f7ebd8e5ddab933c"
-  integrity sha512-9q6WBZa0da8aGDysy/fJMvilIbx52+xDo+aAOpJbvgUzULzxUosFvAoYjqRBLLArz271/eTP+ZKOtcMoTIDXOg==
-
 negotiator@0.6.2:
   version "0.6.2"
   resolved "https://registry.npmjs.org/negotiator/-/negotiator-0.6.2.tgz"

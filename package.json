@@ -39,7 +39,6 @@
     "expo-web-browser": "~10.1.0",
     "graphql": "^16.5.0",
     "graphql-request": "^4.2.0",
-    "native-forms": "^1.7.3",
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "react-native": "0.64.3",
