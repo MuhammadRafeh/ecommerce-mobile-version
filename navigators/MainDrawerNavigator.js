@@ -20,6 +20,7 @@ import { Ionicons, FontAwesome5, MaterialIcons, Entypo } from '@expo/vector-icon
 import ManageOrders from '../screens/admin/manageorders/ManageOrders';
 import { useEcommerceContext } from '../contexts/ContextProvider';
 import Home from '../screens/user/home/Home';
+import { firebase } from '../firebase/services';
 
 import template from '../template/initialTemplate';
 // import checkAndWriteFile from '../functions/checkAndWriteFile';
@@ -39,6 +40,7 @@ function CustomDrawerContent(props) {
             <DrawerItem
                 label={`Sign-out`} onPress={async () => {
                     setIsAuth(true)
+                    firebase.auth().signOut();
                 }}
                 style={{ bottom: 40 }}
 
@@ -62,12 +64,12 @@ function CustomDrawerContent(props) {
 const Drawer = createDrawerNavigator();
 
 export default function MainDrawerNavigator() {
-    const { auth, cart } = useEcommerceContext();
-    const index = cart?.findIndex(item => item.username == auth.loginUserInfo.username);
-    let length = 0;
-    if (index != -1) {
-        length = cart[index].items.length;
-    }
+    const { whoIsLogin, cart } = useEcommerceContext();
+    // const index = cart?.findIndex(item => item.username == auth.loginUserInfo.username);
+    // let length = 0;
+    // if (index != -1) {
+    //     length = cart[index].items.length;
+    // }
     return (
         <Drawer.Navigator
             initialRouteName="Home"
@@ -85,12 +87,12 @@ export default function MainDrawerNavigator() {
             drawerContent={props => <CustomDrawerContent {...props} />}
         >
             {
-                auth.whoIsLogin == 'customer' ? (
+                whoIsLogin == 0 ? (
                     <>
                         {/* User Screen */}
                         <Drawer.Screen name="Home" component={Home} options={({ navigation }) => ({
                             drawerIcon: ({ color, size, focused }) => <FontAwesome5 size={size} color={color} name={'house-user'} />,
-                            headerRight: () => <HeaderButton cart navigation={navigation} text={length} />
+                            headerRight: () => <HeaderButton cart navigation={navigation} text={0} />
                         })} />
                         <Drawer.Screen name="Filter" component={Filters} options={({ navigation }) => ({
                             drawerIcon: ({ color, size }) => <Ionicons size={size} color={color} name={'md-funnel-sharp'} />,

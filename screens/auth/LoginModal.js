@@ -11,7 +11,7 @@ import FacebookSignin from './FacebookSignin'
 import { firebase } from '../../firebase/services';
 
 const LoginModal = props => {
-    const { setAuth, auth, allData, setAllData, isAuth, setIsAuth } = useEcommerceContext();
+    const { setAuth, auth, allData, setAllData, isAuth, setIsAuth, allUsers, setWhoIsLogin } = useEcommerceContext();
     const fromTailor = props?.route?.params?.fromTailor;
     const [selected, setSelected] = useState('no');
     const [usernameOrEmail, setUsernameOrEmail] = useState('');
@@ -115,18 +115,33 @@ const LoginModal = props => {
                 }
 
                 <Button normalText title={'Continue'} style={{ marginBottom: 20, borderRadius: 8 }} onPress={async () => {
+                    setIsLoading(true)
                     firebase.auth().signInWithEmailAndPassword(usernameOrEmail, password)
                         .then((object) => {
                             if (!object.user.emailVerified) {
                                 alert('Please verify your email!')
-                                firebaseAuth.signOut();
+                                object.user.sendEmailVerification();
+                                firebase.auth().signOut();
+                                setIsLoading(false);
                                 return
                             }
                             // dispatch(authenticate(object.user.uid, email.toLowerCase(), false, false))
+                            const index = allUsers.findIndex(item => item.uid == object.user.uid);
+                            if (index == -1) return;
+
+                            setWhoIsLogin(0);
+
+                            if (allUsers[index]?.who == 1) {
+                                setWhoIsLogin(1)
+                            }
 
                             setIsAuth(false)
+                            setIsLoading(false);
                         })
-                        .catch(error => alert(error.message));
+                        .catch(error => {
+                            alert(error.message)
+                            setIsLoading(false);
+                        });
                 }} />
 
                 <TouchableOpacity style={{ marginBottom: 24, alignItems: 'flex-end' }} onPress={() => props.navigation.navigate('Signup', { fromTailor: fromTailor })}>

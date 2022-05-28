@@ -53,10 +53,19 @@ export const ContextProvider = ({ children }) => {
     };
 
     const readAuth = () => {
-        console.log(223)
         firebase.database().ref('auth/').on('value', function (snapshot) {
-            setAllUsers(snapshot.val())
-            console.log('new')
+            const response = snapshot.val();
+            if (!response) return;
+            const allUsers = [];
+            Object.keys(response).forEach(id => {
+                const data = response[id];
+                allUsers.push({
+                    id,
+                    ...data
+                })
+            })
+            setAllUsers(allUsers)
+            console.log('new', allUsers)
         })
     }
 
@@ -86,7 +95,7 @@ export const ContextProvider = ({ children }) => {
 
     const [allUsers, setAllUsers] = useState([])
     const [isAuth, setIsAuth] = useState(true);
-    const [whoIsLogin, setWhoIsLogin] = useState('customer'); // customer | tailor
+    const [whoIsLogin, setWhoIsLogin] = useState(0); // customer | tailor
 
     return (
         <AuthContext.Provider value={{ allUsers, setAllUsers, whoIsLogin, setWhoIsLogin, isAuth, setIsAuth, priceFilter, setPriceFilter, savedItems, setSavedItems, weeklyDeals, setWeeklyDeals, items, setItems, auth, setAuth, cart, setCart, allData, setAllData, orders, setOrders, favoriteItems, setFavoriteItems }}>

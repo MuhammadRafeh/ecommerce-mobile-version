@@ -48,6 +48,9 @@ const Signup = props => {
                 setIsLoading(false);
                 return;
             }
+            setIsEmailValid(true);
+            setIsUsernameValid(true);
+            setIsPasswordValid(true);
             Keyboard.dismiss();
 
             firebase.auth().createUserWithEmailAndPassword(email, password).then((object) => {
@@ -55,7 +58,8 @@ const Signup = props => {
                     uid: object.user.uid,
                     email: email.toLowerCase(),
                     who: fromTailor == true ? 1 : 0, // 0 customer 1 for admin
-                    signUpFrom: 'app'
+                    signUpFrom: 'app',
+                    username: username
                 }).then((data) => {
 
                     object.user.sendEmailVerification();
@@ -65,11 +69,14 @@ const Signup = props => {
 
                 }).catch((error) => {
                 })
+                setIsLoading(false);
+
             }).catch(err => {
                 ToastAndroid.showWithGravity(err.message, ToastAndroid.SHORT, ToastAndroid.BOTTOM)
+                setIsLoading(false);
+
             })
 
-            setIsLoading(true);
             return;
         }
         setIsLoading(false);
