@@ -5,6 +5,7 @@ import EditIcon from 'react-native-vector-icons/FontAwesome'
 import DeleteIcon from 'react-native-vector-icons/AntDesign'
 import { useEcommerceContext } from '../contexts/ContextProvider';
 import CartItem from '../models/cartItem';
+// import checkAndWriteFile from '../functions/checkAndWriteFile';
 import Cart from '../models/cart';
 
 export const Card = (props) => {
@@ -12,12 +13,14 @@ export const Card = (props) => {
     const { item, isAdmin, navigation } = props;
 
     const handleDeletePress = async id => {
-        const catIndex = items.findIndex(cat => cat.name == item.name);
-        const newItems = items[catIndex].items.filter(item => item.id != id);
+        const catIndex = items.categories.findIndex(cat => cat.name == item.name);
+        const newItems = items.categories[catIndex].items.filter(item => item.id != id);
 
-        const dupItems = [...items]
+        const dupItems = {
+            ...items
+        }
 
-        dupItems[catIndex].items = newItems;
+        dupItems.categories[catIndex].items = newItems;
 
         setItems(dupItems);
 
@@ -26,7 +29,7 @@ export const Card = (props) => {
             items: dupItems
         }
 
-        // await checkAndWriteFile(newData);
+        await checkAndWriteFile(newData);
         setAllData(newData)
 
     }
@@ -105,7 +108,7 @@ export const Card = (props) => {
     return (
         <View style={styles.cardStyle}>
             <View style={styles.cardHeadingStyle}>
-                <Text style={styles.cardHeadingTextStyle}>{item.name} Products</Text>
+                <Text style={styles.cardHeadingTextStyle}>{item.name}</Text>
             </View>
             <View style={{ flexDirection: 'row', width: '100%' }}>
                 <ScrollView horizontal={!isAdmin} showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingRight: 20 }}>
@@ -162,7 +165,7 @@ export const Card = (props) => {
                                         ...allData,
                                         cart: newCart
                                     }
-                                    await checkAndWriteFile(newData);
+                                    // await checkAndWriteFile(newData);
                                     setAllData(newData)
                                 }}>
                                     <Text style={styles.moreProductBuyButtonText}>Add to cart</Text>
@@ -195,7 +198,7 @@ const styles = StyleSheet.create({
     cardStyle: {
         backgroundColor: colors.secondary,
         paddingVertical: 10,
-        marginTop: 0
+        // marginTop: 20
     },
     Acard: {
         marginVertical: 10,
@@ -257,9 +260,44 @@ const styles = StyleSheet.create({
         color: '#606070',
         fontSize: 16,
         fontWeight: 'bold',
+        // marginBottom: 10
     },
     childViewTextStyle: {
         flexDirection: 'row',
         justifyContent: 'space-between',
     },
+    moreProductImageView: {
+        flex: 1,
+        height: 240,
+        backgroundColor: '#fff',
+        borderRadius: 4,
+        overflow: 'hidden',
+    },
+    moreProductName: {
+        fontFamily: 'light',
+        fontSize: 16,
+    },
+    moreProductPriceView: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginTop: 8,
+    },
+    moreProductPrice: {
+        fontSize: 16,
+        fontFamily: 'light',
+    },
+    moreProductBuyButton: {
+        backgroundColor: colors.primary,
+        marginTop: 10,
+        paddingVertical: 8,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 4
+    },
+    moreProductBuyButtonText: {
+        color: '#fff',
+        fontFamily: 'Lato-Black',
+        fontSize: 18,
+    }
 })
