@@ -42,13 +42,13 @@ const AddModifyItems = props => {
                 category
                 // []   
             }
-            const copyCategories = [...items.categories];
+            const copyCategories = [...items];
 
             const indexOfCategory = copyCategories.findIndex(cat => cat.name == category);
 
             copyCategories[indexOfCategory].items.push(new Item(UID, name, detail, parseFloat(price), imageUri, []));
 
-            const copyItems = { ...items, categories: copyCategories };
+            const copyItems = [ ...items, ...copyCategories ];
 
             setItems(copyItems);
 
@@ -166,7 +166,7 @@ const AddModifyItems = props => {
                         isEdit ? (
                             <Picker.Item label={categoryParameter} value={categoryParameter} />
                         ) : (
-                            items.categories.map((item, index) => (
+                            items.map((item, index) => (
                                 <Picker.Item label={item.name} value={item.name} key={index} />
                             ))
                         )

@@ -8,7 +8,7 @@ import generateID from '../../../functions/generateId';
 import weeklyDeal from '../../../models/weeklyDeals';
 
 const AddModifyItems = props => {
-    const { allData, setAllData, items, setItems, weeklyDeals, setWeeklyDeals } = useEcommerceContext();
+    const { allData, setAllData, weeklyDeals, setWeeklyDeals } = useEcommerceContext();
 
     const [name, setName] = useState('')
     const [detail, setDetail] = useState('')

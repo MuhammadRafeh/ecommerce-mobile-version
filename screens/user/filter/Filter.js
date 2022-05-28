@@ -15,9 +15,7 @@ const Filters = props => {
     const [isUsernameValid, setIsUsernameValid] = useState(true)
 
     useEffect(() => {
-        setSavedItems({
-            ...items
-        })
+        setSavedItems(items)
     }, [])
 
     const setPrice = val => {
@@ -44,20 +42,14 @@ const Filters = props => {
         if (index == -1) {
             setFilter([...filter, name])
 
-            const filteredCategory = items.categories.filter(cat => cat.name != name);
-            setItems({
-                lastId: 16,
-                categories: filteredCategory
-            })
+            const filteredCategory = items.filter(cat => cat.name != name);
+            setItems(filteredCategory)
 
         } else {
             setFilter(filter.filter(names => names != name))
 
-            const categoryIndex = savedItems.categories.findIndex(cat => cat.name == name);
-            setItems({
-                lastId: 16,
-                categories: [...items.categories, { ...savedItems.categories[categoryIndex] }]
-            })
+            const categoryIndex = savedItems.findIndex(cat => cat.name == name);
+            setItems([...items.categories, { ...savedItems.categories[categoryIndex] }])
         }
 
     }

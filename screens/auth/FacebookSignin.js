@@ -2,10 +2,9 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import * as Facebook from 'expo-facebook';
 import { useEcommerceContext } from '../../contexts/ContextProvider';
-// import checkAndWriteFile from '../../functions/checkAndWriteFile';
 import { Ionicons } from '@expo/vector-icons';
 
-const FacebookSignin = propss => {
+const FacebookSignin = props => {
     const { setAuth, auth, allData, setAllData } = useEcommerceContext();
 
     async function logIn(props) {
@@ -20,28 +19,7 @@ const FacebookSignin = propss => {
             if (type === 'success') {
                 const response = await fetch(`https://graph.facebook.com/me?access_token=${token}`);
 
-                propss.navigation.popToTop();
-                propss.navigation.replace('DrawerCartStackNavigator')
-                const newAuth = {
-                    ...auth,
-                    whoIsLogin: 'user',
-                    loginUserInfo: {
-                        email: '',
-                        username: await response.json().name,
-                        password: '',
-                        loginFromWhere: 'f' // f | g
-                    }
-                };
-                setAuth(newAuth)
-                setAllData({
-                    ...allData,
-                    auth: newAuth
-                })
-                // await checkAndWriteFile({
-                //     ...allData,
-                //     auth: newAuth
-                // })
-
+                const info = await response.json() //info.id and info.name
 
             } else {
             }

@@ -25,7 +25,7 @@ import template from '../template/initialTemplate';
 // import checkAndWriteFile from '../functions/checkAndWriteFile';
 
 function CustomDrawerContent(props) {
-    const { allData, setAllData, auth, setAuth } = useEcommerceContext();
+    const { setIsAuth } = useEcommerceContext();
     return (
         <>
             <DrawerContentScrollView {...props}>
@@ -38,24 +38,7 @@ function CustomDrawerContent(props) {
 
             <DrawerItem
                 label={`Sign-out`} onPress={async () => {
-
-                    const newAuth = {
-                        ...auth,
-                        whoIsLogin: template.auth.whoIsLogin,
-                        loginUserInfo: template.auth.loginUserInfo
-                    };
-
-                    const newData = {
-                        ...allData,
-                        auth: newAuth
-                    };
-
-                    // await checkAndWriteFile(newData);
-                    setAuth(newAuth)
-                    setAllData(newData);
-
-                    props.navigation.replace('Index');
-
+                    setIsAuth(true)
                 }}
                 style={{ bottom: 40 }}
 
@@ -102,7 +85,7 @@ export default function MainDrawerNavigator() {
             drawerContent={props => <CustomDrawerContent {...props} />}
         >
             {
-                auth.whoIsLogin == 'user' ? (
+                auth.whoIsLogin == 'customer' ? (
                     <>
                         {/* User Screen */}
                         <Drawer.Screen name="Home" component={Home} options={({ navigation }) => ({
@@ -128,14 +111,14 @@ export default function MainDrawerNavigator() {
                             headerLeft: () => <HeaderButton navigation={navigation} />,
                             headerStatusBarHeight: 59,
                             headerTitle: '',
-                            
+
                             headerLeftContainerStyle: { paddingLeft: 15 },
                             headerStyle: { borderBottomWidth: 0, elevation: 0, backgroundColor: colors.offWhite },
                         })} />
                     </>
                 ) : (
                     <>
-                        {/* Admin Screens */}
+                        {/* Tailors Screens */}
                         < Drawer.Screen name="Home" component={AdminHome} options={({ navigation }) => ({
                             drawerIcon: ({ color, size, focused }) => <FontAwesome5 size={size} color={color} name={'house-user'} />
                         })} />
@@ -147,7 +130,7 @@ export default function MainDrawerNavigator() {
                             headerLeftContainerStyle: { paddingLeft: 15 },
                             headerStyle: { borderBottomWidth: 0, elevation: 0, backgroundColor: colors.offWhite },
                         })} />
-                           <Drawer.Screen name="Create Weekly Deals" component={weeklyDeals} options={({ navigation }) => ({
+                        <Drawer.Screen name="Create Weekly Deals" component={weeklyDeals} options={({ navigation }) => ({
                             drawerIcon: ({ color, size, focused }) => <Entypo size={size} color={color} name={'shopping-bag'} />,
                             headerLeft: () => <HeaderButton navigation={navigation} />,
                             headerStatusBarHeight: 59,

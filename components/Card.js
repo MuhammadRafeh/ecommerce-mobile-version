@@ -5,7 +5,6 @@ import EditIcon from 'react-native-vector-icons/FontAwesome'
 import DeleteIcon from 'react-native-vector-icons/AntDesign'
 import { useEcommerceContext } from '../contexts/ContextProvider';
 import CartItem from '../models/cartItem';
-// import checkAndWriteFile from '../functions/checkAndWriteFile';
 import Cart from '../models/cart';
 
 export const Card = (props) => {
@@ -13,14 +12,12 @@ export const Card = (props) => {
     const { item, isAdmin, navigation } = props;
 
     const handleDeletePress = async id => {
-        const catIndex = items.categories.findIndex(cat => cat.name == item.name);
-        const newItems = items.categories[catIndex].items.filter(item => item.id != id);
+        const catIndex = items.findIndex(cat => cat.name == item.name);
+        const newItems = items[catIndex].items.filter(item => item.id != id);
 
-        const dupItems = {
-            ...items
-        }
+        const dupItems = [...items]
 
-        dupItems.categories[catIndex].items = newItems;
+        dupItems[catIndex].items = newItems;
 
         setItems(dupItems);
 

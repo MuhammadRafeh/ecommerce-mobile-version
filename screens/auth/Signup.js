@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { Text, View, TextInput, Alert, Keyboard } from 'react-native';
+import { Text, View, TextInput, Alert, Keyboard, ToastAndroid } from 'react-native';
 import Button from '../../components/UI/Button';
 import CloseButton from '../../components/UI/CloseButton';
 import FullScreenIndicator from '../../components/UI/FullScreenIndicator';
@@ -9,6 +9,7 @@ import { useEcommerceContext } from '../../contexts/ContextProvider';
 import validateEmail from '../../functions/validateEmail';
 import validatePassword from '../../functions/validatePassword';
 import validateUsername from '../../functions/validateUsername';
+import firebase from "firebase";
 
 const Signup = props => {
     const { auth, setAuth, allData, setAllData } = useEcommerceContext();
@@ -49,23 +50,15 @@ const Signup = props => {
             }
             Keyboard.dismiss();
 
-            const newAuth = {
-                ...auth,
-                users: [...auth.users, { email: email.trim(), username: username.trim(), password: password.trim() }],
-            }
+            firebase.auth().createUserWithEmailAndPassword(email, password).then((object) => {
+                object.user.sendEmailVerification();
+                firebase.auth().signOut();
+                ToastAndroid.showWithGravity('Verify your email in order to login', ToastAndroid.SHORT, ToastAndroid.BOTTOM)
+                props.navigation.goBack();
+            }).catch(err => {
+                ToastAndroid.showWithGravity(err.message, ToastAndroid.SHORT, ToastAndroid.BOTTOM)
+            })
 
-            const newData = {
-                ...allData,
-                auth: newAuth
-            }
-            Alert.alert('Operation Success', 'You can now Login!', [{ text: 'Ok', style: 'destructive', onPress: () => props.navigation.goBack() }])
-
-            // await checkAndWriteFile(newData)
-            setAllData(newData);
-
-            setIsLoading(false);
-
-            setAuth(newAuth)
             return;
         }
         setIsLoading(false);

@@ -1,9 +1,11 @@
 import { NavigationContainer } from '@react-navigation/native';
-import RootStackNavigator from './navigators/RootStackNavigator';
-import { ContextProvider } from './contexts/ContextProvider';
+import AuthNavigator from './navigators/AuthNavigator';
+import { ContextProvider, useEcommerceContext } from './contexts/ContextProvider';
 import firebase from "firebase/app";
+import StackDrawerNavigator from './navigators/StackDrawerNavigator';
 
-export default App = () => {
+App = () => {
+  const { isAuth } = useEcommerceContext();
   var config = {
     apiKey: "AIzaSyAlrE8-Hgu-tnYB-JwT6c-eOUL0zE7KbFQ",
     storageBucket: "shopnstich.appspot.com",
@@ -18,10 +20,22 @@ export default App = () => {
   }
 
   return (
+    <NavigationContainer>
+      {
+        isAuth ? (
+          <AuthNavigator />
+        ) : (
+          <StackDrawerNavigator />
+        )
+      }
+    </NavigationContainer>
+  )
+}
+
+export default AppWrapper = () => {
+  return (
     <ContextProvider>
-      <NavigationContainer>
-        <RootStackNavigator />
-      </NavigationContainer>
+      <App />
     </ContextProvider>
   )
 }

@@ -47,8 +47,8 @@ export const ContextProvider = ({ children }) => {
                 )
             )
         })
-        setItems({ lastId: 98989, categories: items })
-        setSavedItems({ lastId: 98989, categories: items })
+        setItems(items)
+        setSavedItems(items)
     };
 
     useEffect(() => {
@@ -64,23 +64,20 @@ export const ContextProvider = ({ children }) => {
     const [weeklyDeals, setWeeklyDeals] = useState([]);
 
     const [favoriteItems, setFavoriteItems] = useState([]);
-
+    
     const [allData, setAllData] = useState(template);
-
-    const [items, setItems] = useState({
-        lastId: 16,
-        categories: defaultItems
-    });
-
-    const [savedItems, setSavedItems] = useState({
-        lastId: 16,
-        categories: defaultItems
-    });
-
+    
+    const [items, setItems] = useState([]);
+    const [savedItems, setSavedItems] = useState([]);
+    
     const [priceFilter, setPriceFilter] = useState('nothing');
+    
+    // New
+    
+    const [isAuth, setIsAuth] = useState(true);
 
     return (
-        <AuthContext.Provider value={{ priceFilter, setPriceFilter, savedItems, setSavedItems, weeklyDeals, setWeeklyDeals, items, setItems, auth, setAuth, cart, setCart, allData, setAllData, orders, setOrders, favoriteItems, setFavoriteItems }}>
+        <AuthContext.Provider value={{ isAuth, setIsAuth, priceFilter, setPriceFilter, savedItems, setSavedItems, weeklyDeals, setWeeklyDeals, items, setItems, auth, setAuth, cart, setCart, allData, setAllData, orders, setOrders, favoriteItems, setFavoriteItems }}>
             {children}
         </AuthContext.Provider>
     )
