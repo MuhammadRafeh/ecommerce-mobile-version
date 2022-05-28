@@ -5,6 +5,7 @@ import { gql } from 'graphql-request';
 import graphcms from '../graphCMS/graphCMS';
 import Category from '../models/category';
 import Item from '../models/item';
+import { firebase } from '../firebase/services';
 
 const AuthContext = createContext();
 
@@ -51,8 +52,17 @@ export const ContextProvider = ({ children }) => {
         setSavedItems(items)
     };
 
+    const readAuth = () => {
+        console.log(223)
+        firebase.database().ref('auth/').on('value', function (snapshot) {
+            setAllUsers(snapshot.val())
+            console.log('new')
+        })
+    }
+
     useEffect(() => {
         getData();
+        readAuth();
     }, []);
 
     const [auth, setAuth] = useState(template.auth);
@@ -64,20 +74,22 @@ export const ContextProvider = ({ children }) => {
     const [weeklyDeals, setWeeklyDeals] = useState([]);
 
     const [favoriteItems, setFavoriteItems] = useState([]);
-    
+
     const [allData, setAllData] = useState(template);
-    
+
     const [items, setItems] = useState([]);
     const [savedItems, setSavedItems] = useState([]);
-    
+
     const [priceFilter, setPriceFilter] = useState('nothing');
-    
+
     // New
-    
+
+    const [allUsers, setAllUsers] = useState([])
     const [isAuth, setIsAuth] = useState(true);
+    const [whoIsLogin, setWhoIsLogin] = useState('customer'); // customer | tailor
 
     return (
-        <AuthContext.Provider value={{ isAuth, setIsAuth, priceFilter, setPriceFilter, savedItems, setSavedItems, weeklyDeals, setWeeklyDeals, items, setItems, auth, setAuth, cart, setCart, allData, setAllData, orders, setOrders, favoriteItems, setFavoriteItems }}>
+        <AuthContext.Provider value={{ allUsers, setAllUsers, whoIsLogin, setWhoIsLogin, isAuth, setIsAuth, priceFilter, setPriceFilter, savedItems, setSavedItems, weeklyDeals, setWeeklyDeals, items, setItems, auth, setAuth, cart, setCart, allData, setAllData, orders, setOrders, favoriteItems, setFavoriteItems }}>
             {children}
         </AuthContext.Provider>
     )

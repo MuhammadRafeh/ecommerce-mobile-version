@@ -1,5 +1,5 @@
 Arguments: 
-  /home/shikari/.nvm/versions/node/v16.14.2/bin/node /usr/bin/yarn add firebase^8.6.2
+  /home/shikari/.nvm/versions/node/v16.14.2/bin/node /usr/bin/yarn add firebase
 
 PATH: 
   /home/shikari/.nvm/versions/node/v16.14.2/bin:/home/shikari/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/shikari/Android/Sdk/emulator:/home/shikari/Android/Sdk/tools:/home/shikari/Android/Sdk/tools/bin:/home/shikari/Android/Sdk/platform-tools:/home/shikari/Android/Sdk/emulator:/home/shikari/Android/Sdk/tools:/home/shikari/Android/Sdk/tools/bin:/home/shikari/Android/Sdk/platform-tools
@@ -14,17 +14,8 @@ Platform:
   linux x64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/firebase%5E8.6.2: Not found
-      at Request.params.callback [as _callback] (/usr/lib/node_modules/yarn/lib/cli.js:66988:18)
-      at Request.self.callback (/usr/lib/node_modules/yarn/lib/cli.js:140662:22)
-      at Request.emit (node:events:526:28)
-      at Request.<anonymous> (/usr/lib/node_modules/yarn/lib/cli.js:141634:10)
-      at Request.emit (node:events:526:28)
-      at IncomingMessage.<anonymous> (/usr/lib/node_modules/yarn/lib/cli.js:141556:12)
-      at Object.onceWrapper (node:events:645:28)
-      at IncomingMessage.emit (node:events:538:35)
-      at endReadableNT (node:internal/streams/readable:1345:12)
-      at processTicksAndRejections (node:internal/process/task_queues:83:21)
+  Error: connect ENETUNREACH 104.16.20.35:443
+      at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1157:16)
 
 npm manifest: 
   {
@@ -3228,7 +3219,7 @@ Lockfile:
   
   get-caller-file@^2.0.1:
     version "2.0.5"
-    resolved "https://registry.npmjs.org/get-caller-file/-/get-caller-file-2.0.5.tgz"
+    resolved "https://registry.yarnpkg.com/get-caller-file/-/get-caller-file-2.0.5.tgz#4f94412a82db32f36e3b0b9741f8a97feb031f7e"
     integrity sha512-DyFP3BM/3YHTQOCUL/w0OZHR0lpKeGrxotcHWcqNEdnltqFwXVfhEBQ94eIo34AfQpo0rGki4cyIiftY06h2Fg==
   
   get-intrinsic@^1.0.2:

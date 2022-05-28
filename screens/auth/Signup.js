@@ -9,10 +9,11 @@ import { useEcommerceContext } from '../../contexts/ContextProvider';
 import validateEmail from '../../functions/validateEmail';
 import validatePassword from '../../functions/validatePassword';
 import validateUsername from '../../functions/validateUsername';
-import firebase from "firebase";
+import { firebase } from '../../firebase/services';
 
 const Signup = props => {
     const { auth, setAuth, allData, setAllData } = useEcommerceContext();
+    const fromTailor = props?.route?.params?.fromTailor;
 
     const [selected, setSelected] = useState('email');
     const [email, setEmail] = useState('');
@@ -26,7 +27,6 @@ const Signup = props => {
     const emailRef = useRef(null);
     const usernameRef = useRef(null);
     const passwordRef = useRef(null);
-
 
     const handleSignup = async () => {
         setIsLoading(true);
@@ -51,14 +51,25 @@ const Signup = props => {
             Keyboard.dismiss();
 
             firebase.auth().createUserWithEmailAndPassword(email, password).then((object) => {
-                object.user.sendEmailVerification();
-                firebase.auth().signOut();
-                ToastAndroid.showWithGravity('Verify your email in order to login', ToastAndroid.SHORT, ToastAndroid.BOTTOM)
-                props.navigation.goBack();
+                firebase.database().ref('auth/').push({
+                    uid: object.user.uid,
+                    email: email.toLowerCase(),
+                    who: fromTailor == true ? 1 : 0, // 0 customer 1 for admin
+                    signUpFrom: 'app'
+                }).then((data) => {
+
+                    object.user.sendEmailVerification();
+                    firebase.auth().signOut();
+                    ToastAndroid.showWithGravity('Verify your email in order to login', ToastAndroid.SHORT, ToastAndroid.BOTTOM)
+                    props.navigation.goBack();
+
+                }).catch((error) => {
+                })
             }).catch(err => {
                 ToastAndroid.showWithGravity(err.message, ToastAndroid.SHORT, ToastAndroid.BOTTOM)
             })
 
+            setIsLoading(true);
             return;
         }
         setIsLoading(false);

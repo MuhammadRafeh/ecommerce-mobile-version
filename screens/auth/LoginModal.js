@@ -8,7 +8,7 @@ import colors from '../../constants/colors';
 import { useEcommerceContext } from '../../contexts/ContextProvider';
 import GoogleSignin from './GoogleSignin'
 import FacebookSignin from './FacebookSignin'
-import firebase from "firebase";
+import { firebase } from '../../firebase/services';
 
 const LoginModal = props => {
     const { setAuth, auth, allData, setAllData, isAuth, setIsAuth } = useEcommerceContext();
@@ -115,22 +115,21 @@ const LoginModal = props => {
                 }
 
                 <Button normalText title={'Continue'} style={{ marginBottom: 20, borderRadius: 8 }} onPress={async () => {
-                    firebase
-                        .auth()
-                        .signInWithEmailAndPassword(usernameOrEmail, password)
+                    firebase.auth().signInWithEmailAndPassword(usernameOrEmail, password)
                         .then((object) => {
                             if (!object.user.emailVerified) {
                                 alert('Please verify your email!')
-                                firebase.auth().signOut();
+                                firebaseAuth.signOut();
                                 return
                             }
                             // dispatch(authenticate(object.user.uid, email.toLowerCase(), false, false))
+
                             setIsAuth(false)
                         })
                         .catch(error => alert(error.message));
                 }} />
 
-                <TouchableOpacity style={{ marginBottom: 24, alignItems: 'flex-end' }} onPress={() => props.navigation.navigate('Signup')}>
+                <TouchableOpacity style={{ marginBottom: 24, alignItems: 'flex-end' }} onPress={() => props.navigation.navigate('Signup', { fromTailor: fromTailor })}>
                     <Text style={{ color: colors.primary, fontWeight: 'bold' }}>
                         Create Account
                     </Text>
