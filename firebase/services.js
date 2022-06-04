@@ -1,16 +1,18 @@
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
 import "firebase/compat/database";
-
-var firebaseConfig = {
-    apiKey: "AIzaSyAlrE8-Hgu-tnYB-JwT6c-eOUL0zE7KbFQ",
-    storageBucket: "shopnstich.appspot.com",
-    databaseURL: "https://shopnstich-default-rtdb.firebaseio.com",
-    projectId: "shopnstich",
-};
+import Constants from 'expo-constants';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+// import { initializeAuth } from "firebase/auth";
+import { initializeAuth } from "firebase/auth";
+import { getReactNativePersistence } from "firebase/auth/react-native";
 
 if (!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig)
+    const defaultApp = firebase.initializeApp(Constants.manifest.extra.firebase)
+    console.log(defaultApp, 'asd')
+    initializeAuth(defaultApp, {
+        persistence: getReactNativePersistence(AsyncStorage),
+    });
 }
 
 export { firebase };
