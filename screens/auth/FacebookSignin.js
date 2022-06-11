@@ -2,49 +2,52 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import * as Facebook from 'expo-facebook';
 import { useEcommerceContext } from '../../contexts/ContextProvider';
-import checkAndWriteFile from '../../functions/checkAndWriteFile';
 import { Ionicons } from '@expo/vector-icons';
+import Constants from 'expo-constants';
+import { firebase } from '../../firebase/services'
 
-const FacebookSignin = propss => {
+const FacebookSignin = props => {
     const { setAuth, auth, allData, setAllData } = useEcommerceContext();
 
     async function logIn(props) {
         try {
+            // await Facebook.initializeAsync({
+            //     appId: '1058518701540571',
+            // });
+            // const { type, token, expirationDate, permissions, declinedPermissions } =
+            //     await Facebook.logInWithReadPermissionsAsync({
+            //         permissions: ['public_profile'],
+            //     });
+            // if (type === 'success') {
+            //     const response = await fetch(`https://graph.facebook.com/me?access_token=${token}`);
+
+            //     const info = await response.json() //info.id and info.name
+            //     console.log(info)
+            // } else {
+            // }
+
+
+
+            const appId = Constants.manifest.extra.facebook.appId;
+
             await Facebook.initializeAsync({
-                appId: '471321207933541',
+                appId: appId,
             });
             const { type, token, expirationDate, permissions, declinedPermissions } =
                 await Facebook.logInWithReadPermissionsAsync({
-                    permissions: ['public_profile'],
+                    permissions: ['public_profile', 'email']
                 });
-            if (type === 'success') {
-                const response = await fetch(`https://graph.facebook.com/me?access_token=${token}`);
+                console.log(permissions, expirationDate, token)
+            if (type == 'success') {
+                await firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);  // Set persistent auth state
+                const credential = firebase.auth.FacebookAuthProvider.credential(token);
+                const facebookProfileData = await firebase.auth().signInWithCredential(credential);  // Sign in with Facebook credential
 
-                propss.navigation.popToTop();
-                propss.navigation.replace('DrawerCartStackNavigator')
-                const newAuth = {
-                    ...auth,
-                    whoIsLogin: 'user',
-                    loginUserInfo: {
-                        email: '',
-                        username: await response.json().name,
-                        password: '',
-                        loginFromWhere: 'f' // f | g
-                    }
-                };
-                setAuth(newAuth)
-                setAllData({
-                    ...allData,
-                    auth: newAuth
-                })
-                await checkAndWriteFile({
-                    ...allData,
-                    auth: newAuth
-                })
-
-
+                console.log("facebookProfileData")
             } else {
+                alert('Something Went Wrong!');
             }
+
         } catch ({ message }) {
             alert(`Facebook Login Error: ${message}`);
         }

@@ -6,18 +6,44 @@ import colors from '../../../constants/colors';
 import { useEcommerceContext } from '../../../contexts/ContextProvider';
 import SortingButton from '../../../components/user/home/SortingButton';
 
+import { gql } from 'graphql-request';
+
+const QUERY = gql`
+query MyQuery {
+  categories{
+    id
+    name
+    collections {
+      id
+      name
+      varieties {
+        id
+        name
+        products {
+          id
+          name
+          price
+          description
+          excerpt
+        }
+      }
+    }
+  }
+}`;
+
+
 export default function Home(props) {
     const { items } = useEcommerceContext();
 
     const [search, setSearch] = useState('');
 
 
-    const [filteredDataSource, setFilteredDataSource] = useState(items.categories);
-    const [masterDataSource, setMasterDataSource] = useState(items.categories);
+    const [filteredDataSource, setFilteredDataSource] = useState(items);
+    const [masterDataSource, setMasterDataSource] = useState(items);
 
     useEffect(() => {
-        setFilteredDataSource(items.categories);
-        setMasterDataSource(items.categories);
+        setFilteredDataSource(items);
+        setMasterDataSource(items);
     }, [items]);
 
     const searchFilterFunction = (text) => {

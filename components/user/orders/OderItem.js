@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import colors from '../../../constants/colors';
 import { useEcommerceContext } from '../../../contexts/ContextProvider';
-import checkAndWriteFile from '../../../functions/checkAndWriteFile';
+// import checkAndWriteFile from '../../../functions/checkAndWriteFile';
 import Rating from '../../../models/rating';
 import Badge from '../../UI/Badge';
 import Button from '../../UI/Button';
@@ -67,7 +67,7 @@ const OrderItem = props => { // inprogress
 
         setAllData(newData);
 
-        await checkAndWriteFile(newData);
+        // await checkAndWriteFile(newData);
 
     }
 

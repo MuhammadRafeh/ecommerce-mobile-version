@@ -1,13 +1,28 @@
 import { NavigationContainer } from '@react-navigation/native';
-import RootStackNavigator from './navigators/RootStackNavigator';
-import { ContextProvider } from './contexts/ContextProvider';
+import AuthNavigator from './navigators/AuthNavigator';
+import { ContextProvider, useEcommerceContext } from './contexts/ContextProvider';
+import StackDrawerNavigator from './navigators/StackDrawerNavigator';
 
-export default App = () => {
+App = () => {
+  const { isAuth } = useEcommerceContext();
+
+  return (
+    <NavigationContainer>
+      {
+        isAuth ? (
+          <AuthNavigator />
+        ) : (
+          <StackDrawerNavigator />
+        )
+      }
+    </NavigationContainer>
+  )
+}
+
+export default AppWrapper = () => {
   return (
     <ContextProvider>
-      <NavigationContainer>
-        <RootStackNavigator />
-      </NavigationContainer>
+      <App />
     </ContextProvider>
   )
 }
