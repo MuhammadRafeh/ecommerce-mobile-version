@@ -20,14 +20,17 @@ import { Ionicons, FontAwesome5, MaterialIcons, Entypo } from '@expo/vector-icon
 import ManageOrders from '../screens/admin/manageorders/ManageOrders';
 import { useEcommerceContext } from '../contexts/ContextProvider';
 import Home from '../screens/user/home/Home';
+import { firebase } from '../firebase/services';
 
 import template from '../template/initialTemplate';
+
 import checkAndWriteFile from '../functions/checkAndWriteFile';
 import Tailors from '../screens/user/Tailors/Tailors';
 import Measurements from '../screens/user/Measurements/Measurements';
 
+
 function CustomDrawerContent(props) {
-    const { allData, setAllData, auth, setAuth } = useEcommerceContext();
+    const { setIsAuth } = useEcommerceContext();
     return (
         <>
             <DrawerContentScrollView {...props}>
@@ -40,24 +43,8 @@ function CustomDrawerContent(props) {
 
             <DrawerItem
                 label={`Sign-out`} onPress={async () => {
-
-                    const newAuth = {
-                        ...auth,
-                        whoIsLogin: template.auth.whoIsLogin,
-                        loginUserInfo: template.auth.loginUserInfo
-                    };
-
-                    const newData = {
-                        ...allData,
-                        auth: newAuth
-                    };
-
-                    await checkAndWriteFile(newData);
-                    setAuth(newAuth)
-                    setAllData(newData);
-
-                    props.navigation.replace('Index');
-
+                    setIsAuth(true)
+                    firebase.auth().signOut();
                 }}
                 style={{ bottom: 40 }}
 
@@ -81,12 +68,12 @@ function CustomDrawerContent(props) {
 const Drawer = createDrawerNavigator();
 
 export default function MainDrawerNavigator() {
-    const { auth, cart } = useEcommerceContext();
-    const index = cart?.findIndex(item => item.username == auth.loginUserInfo.username);
-    let length = 0;
-    if (index != -1) {
-        length = cart[index].items.length;
-    }
+    const { whoIsLogin, cart } = useEcommerceContext();
+    // const index = cart?.findIndex(item => item.username == auth.loginUserInfo.username);
+    // let length = 0;
+    // if (index != -1) {
+    //     length = cart[index].items.length;
+    // }
     return (
         <Drawer.Navigator
             initialRouteName="Home"
@@ -104,12 +91,12 @@ export default function MainDrawerNavigator() {
             drawerContent={props => <CustomDrawerContent {...props} />}
         >
             {
-                auth.whoIsLogin == 'user' ? (
+                whoIsLogin == 0 ? (
                     <>
                         {/* User Screen */}
                         <Drawer.Screen name="Home" component={Home} options={({ navigation }) => ({
                             drawerIcon: ({ color, size, focused }) => <FontAwesome5 size={size} color={color} name={'house-user'} />,
-                            headerRight: () => <HeaderButton cart navigation={navigation} text={length} />
+                            headerRight: () => <HeaderButton cart navigation={navigation} text={0} />
                         })} />
                         <Drawer.Screen name="Filter" component={Filters} options={({ navigation }) => ({
                             drawerIcon: ({ color, size }) => <Ionicons size={size} color={color} name={'md-funnel-sharp'} />,
@@ -130,7 +117,7 @@ export default function MainDrawerNavigator() {
                             headerLeft: () => <HeaderButton navigation={navigation} />,
                             headerStatusBarHeight: 59,
                             headerTitle: '',
-                            
+
                             headerLeftContainerStyle: { paddingLeft: 15 },
                             headerStyle: { borderBottomWidth: 0, elevation: 0, backgroundColor: colors.offWhite },
                         })} />
@@ -145,7 +132,7 @@ export default function MainDrawerNavigator() {
                     </>
                 ) : (
                     <>
-                        {/* Admin Screens */}
+                        {/* Tailors Screens */}
                         < Drawer.Screen name="Home" component={AdminHome} options={({ navigation }) => ({
                             drawerIcon: ({ color, size, focused }) => <FontAwesome5 size={size} color={color} name={'house-user'} />
                         })} />
@@ -157,7 +144,7 @@ export default function MainDrawerNavigator() {
                             headerLeftContainerStyle: { paddingLeft: 15 },
                             headerStyle: { borderBottomWidth: 0, elevation: 0, backgroundColor: colors.offWhite },
                         })} />
-                           <Drawer.Screen name="Create Weekly Deals" component={weeklyDeals} options={({ navigation }) => ({
+                        <Drawer.Screen name="Create Weekly Deals" component={weeklyDeals} options={({ navigation }) => ({
                             drawerIcon: ({ color, size, focused }) => <Entypo size={size} color={color} name={'shopping-bag'} />,
                             headerLeft: () => <HeaderButton navigation={navigation} />,
                             headerStatusBarHeight: 59,

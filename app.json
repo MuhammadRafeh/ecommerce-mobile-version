@@ -29,10 +29,24 @@
         "READ_EXTERNAL_STORAGE",
         "WRITE_EXTERNAL_STORAGE"
       ],
+
       "package": "com.muhammadrafeh.ecommercemobileversion"
+
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "firebase": {
+        "apiKey": "AIzaSyAlrE8-Hgu-tnYB-JwT6c-eOUL0zE7KbFQ",
+        "authDomain": "shopnstich.firebaseapp.com",
+        "storageBucket": "shopnstich.appspot.com",
+        "databaseURL": "https://shopnstich-default-rtdb.firebaseio.com",
+        "projectId": "shopnstich"
+      },
+      "facebook": {
+        "appId": "1058518701540571"
+      }
     }
   }
 }

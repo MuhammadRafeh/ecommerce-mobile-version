@@ -1,17 +1,19 @@
 import React, { useRef, useState } from 'react';
-import { Text, View, TextInput, Alert, Keyboard } from 'react-native';
+import { Text, View, TextInput, Alert, Keyboard, ToastAndroid } from 'react-native';
 import Button from '../../components/UI/Button';
 import CloseButton from '../../components/UI/CloseButton';
 import FullScreenIndicator from '../../components/UI/FullScreenIndicator';
 import colors from '../../constants/colors';
 import { useEcommerceContext } from '../../contexts/ContextProvider';
-import checkAndWriteFile from '../../functions/checkAndWriteFile';
+// import checkAndWriteFile from '../../functions/checkAndWriteFile';
 import validateEmail from '../../functions/validateEmail';
 import validatePassword from '../../functions/validatePassword';
 import validateUsername from '../../functions/validateUsername';
+import { firebase } from '../../firebase/services';
 
 const Signup = props => {
     const { auth, setAuth, allData, setAllData } = useEcommerceContext();
+    const fromTailor = props?.route?.params?.fromTailor;
 
     const [selected, setSelected] = useState('email');
     const [email, setEmail] = useState('');
@@ -25,7 +27,6 @@ const Signup = props => {
     const emailRef = useRef(null);
     const usernameRef = useRef(null);
     const passwordRef = useRef(null);
-
 
     const handleSignup = async () => {
         setIsLoading(true);
@@ -47,25 +48,35 @@ const Signup = props => {
                 setIsLoading(false);
                 return;
             }
+            setIsEmailValid(true);
+            setIsUsernameValid(true);
+            setIsPasswordValid(true);
             Keyboard.dismiss();
 
-            const newAuth = {
-                ...auth,
-                users: [...auth.users, { email: email.trim(), username: username.trim(), password: password.trim() }],
-            }
+            firebase.auth().createUserWithEmailAndPassword(email, password).then((object) => {
+                firebase.database().ref('auth/').push({
+                    uid: object.user.uid,
+                    email: email.toLowerCase(),
+                    who: fromTailor == true ? 1 : 0, // 0 customer 1 for admin
+                    signUpFrom: 'app',
+                    username: username
+                }).then((data) => {
 
-            const newData = {
-                ...allData,
-                auth: newAuth
-            }
-            Alert.alert('Operation Success', 'You can now Login!', [{ text: 'Ok', style: 'destructive', onPress: () => props.navigation.goBack() }])
+                    object.user.sendEmailVerification();
+                    firebase.auth().signOut();
+                    ToastAndroid.showWithGravity('Verify your email in order to login', ToastAndroid.SHORT, ToastAndroid.BOTTOM)
+                    props.navigation.goBack();
 
-            await checkAndWriteFile(newData)
-            setAllData(newData);
+                }).catch((error) => {
+                })
+                setIsLoading(false);
 
-            setIsLoading(false);
+            }).catch(err => {
+                ToastAndroid.showWithGravity(err.message, ToastAndroid.SHORT, ToastAndroid.BOTTOM)
+                setIsLoading(false);
 
-            setAuth(newAuth)
+            })
+
             return;
         }
         setIsLoading(false);

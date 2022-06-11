@@ -5,7 +5,7 @@ import EditIcon from 'react-native-vector-icons/FontAwesome'
 import DeleteIcon from 'react-native-vector-icons/AntDesign'
 import { useEcommerceContext } from '../contexts/ContextProvider';
 import CartItem from '../models/cartItem';
-import checkAndWriteFile from '../functions/checkAndWriteFile';
+// import checkAndWriteFile from '../functions/checkAndWriteFile';
 import Cart from '../models/cart';
 
 export const Card = (props) => {
@@ -165,7 +165,7 @@ export const Card = (props) => {
                                         ...allData,
                                         cart: newCart
                                     }
-                                    await checkAndWriteFile(newData);
+                                    // await checkAndWriteFile(newData);
                                     setAllData(newData)
                                 }}>
                                     <Text style={styles.moreProductBuyButtonText}>Add to cart</Text>

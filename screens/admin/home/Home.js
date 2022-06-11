@@ -12,12 +12,12 @@ const Home = props => {
 
 
     const [search, setSearch] = useState('');
-    const [filteredDataSource, setFilteredDataSource] = useState(items.categories);
-    const [masterDataSource, setMasterDataSource] = useState(items.categories);
+    const [filteredDataSource, setFilteredDataSource] = useState(items);
+    const [masterDataSource, setMasterDataSource] = useState(items);
 
     useEffect(() => {
-        setFilteredDataSource(items.categories);
-        setMasterDataSource(items.categories);
+        setFilteredDataSource(items);
+        setMasterDataSource(items);
     }, [items])
 
     const searchFilterFunction = (text) => {

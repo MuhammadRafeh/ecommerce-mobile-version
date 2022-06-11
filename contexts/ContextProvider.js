@@ -5,7 +5,9 @@ import { gql } from 'graphql-request';
 import graphcms from '../graphCMS/graphCMS';
 import Category from '../models/category';
 import Item from '../models/item';
+
 import checkAndReadFile from '../functions/checkAndReadFile';
+
 
 const AuthContext = createContext();
 
@@ -30,6 +32,7 @@ query MyQuery {
 export const ContextProvider = ({ children }) => {
 
     const getData = async () => {
+
         const data = await checkAndReadFile();
         if (!data) {
             return;
@@ -40,6 +43,7 @@ export const ContextProvider = ({ children }) => {
         setOrders(data.orders)
         setFavoriteItems(data.favoriteItems)
         setWeeklyDeals(data.weeklyDeals)
+
 
         const { varieties } = await graphcms.request(QUERY);
         const items = varieties.map(varieties => {
@@ -59,12 +63,14 @@ export const ContextProvider = ({ children }) => {
                 )
             )
         })
+
         setItems({ lastId: 98989, categories: items })
         setSavedItems({ lastId: 98989, categories: items })
     };
 
     useEffect(() => {
         getData();
+
     }, []);
 
     const [auth, setAuth] = useState(template.auth);
@@ -89,10 +95,17 @@ export const ContextProvider = ({ children }) => {
         categories: []
     });
 
+
     const [priceFilter, setPriceFilter] = useState('nothing');
 
+    // New
+
+    const [allUsers, setAllUsers] = useState([])
+    const [isAuth, setIsAuth] = useState(true);
+    const [whoIsLogin, setWhoIsLogin] = useState(0); // customer | tailor
+
     return (
-        <AuthContext.Provider value={{ priceFilter, setPriceFilter, savedItems, setSavedItems, weeklyDeals, setWeeklyDeals, items, setItems, auth, setAuth, cart, setCart, allData, setAllData, orders, setOrders, favoriteItems, setFavoriteItems }}>
+        <AuthContext.Provider value={{ allUsers, setAllUsers, whoIsLogin, setWhoIsLogin, isAuth, setIsAuth, priceFilter, setPriceFilter, savedItems, setSavedItems, weeklyDeals, setWeeklyDeals, items, setItems, auth, setAuth, cart, setCart, allData, setAllData, orders, setOrders, favoriteItems, setFavoriteItems }}>
             {children}
         </AuthContext.Provider>
     )

@@ -3,11 +3,11 @@ import { Text, View, Image, ScrollView } from 'react-native';
 import Steps from '../../components/UI/Steps';
 import Constants from 'expo-constants';
 import Card from '../../components/UI/Card';
-import checkAndCreateFolder from '../../functions/checkAndCreateFolder';
+// import checkAndCreateFolder from '../../functions/checkAndCreateFolder';
 
 const Login = props => {
     useEffect(() => {
-        checkAndCreateFolder();
+        // checkAndCreateFolder();
     }, [])
     return (
         <View style={{ flex: 1, paddingTop: Constants.statusBarHeight + 20 }}>
@@ -54,8 +54,10 @@ const Login = props => {
 
                     {/* <Button title={'Continue'} style={{ marginTop: 46 }} onPress={() => props.navigation.navigate('SignupModel', { fromSeller: true })} /> */}
                     <View style={{ flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center', top: -10, marginTop: 60 }}>
+
                         <Card style={{ width: '44.4%' }} text={'User'} image={require('../../assets/images/user.png')} onPress={() => props.navigation.navigate('Login')} />
                         <Card style={{ width: '44.4%' }} text={'Tailor'} image={require('../../assets/images/admin.png')} onPress={() => props.navigation.navigate('Login', { fromAdmin: true })} />
+
                     </View>
 
                 </ScrollView>

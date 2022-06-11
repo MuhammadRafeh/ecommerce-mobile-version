@@ -4,7 +4,7 @@ import colors from '../../constants/colors';
 import { useEcommerceContext } from '../../contexts/ContextProvider';
 import CartItem from '../../models/cartItem';
 import Cart from '../../models/cart';
-import checkAndWriteFile from '../../functions/checkAndWriteFile';
+// import checkAndWriteFile from '../../functions/checkAndWriteFile';
 import { Ionicons } from '@expo/vector-icons';
 import FavoritesItemModal from '../../models/favoriteItem';
 
@@ -45,7 +45,7 @@ const ProductDetailScreen = props => {
             favoriteItems: newFavorites
         };
 
-        await checkAndWriteFile(newData)
+        // await checkAndWriteFile(newData)
         setAllData(newData);
     }
 
@@ -73,7 +73,7 @@ const ProductDetailScreen = props => {
                 ...allData,
                 cart: newCart
             }
-            await checkAndWriteFile(newData);
+            // await checkAndWriteFile(newData);
             setAllData(newData)
             return;
         }
@@ -92,7 +92,7 @@ const ProductDetailScreen = props => {
             ...allData,
             cart: newCart
         }
-        await checkAndWriteFile(newData);
+        // await checkAndWriteFile(newData);
         setAllData(newData)
     }
 
