@@ -7,10 +7,15 @@ const ProductCard = ({ data, navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
-        data={data}
+
+        contentContainerStyle={{ paddingBottom: 20 }}
         keyExtractor={(data) => data.id}
+        data={data}
         renderItem={({ item }) => (
-          <Card item={item} isAdmin={false} navigation={navigation} />
+          <View>
+            <Card item={item} isAdmin={false} navigation={navigation} />
+          </View>
+
         )}
       />
     </SafeAreaView>

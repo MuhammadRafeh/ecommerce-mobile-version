@@ -14,7 +14,7 @@ const Favorites = props => {
         return (
             <View style={styles.content}>
                 <Text style={{ fontFamily: 'italic', fontSize: 18 }} adjustsFontSizeToFit={true} numberOfLines={1}>
-                    No Favorite meals found. Start adding some!
+                    No Favorite clothes found. Start adding some!
                 </Text>
             </View>
         )

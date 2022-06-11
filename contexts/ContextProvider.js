@@ -5,7 +5,9 @@ import { gql } from 'graphql-request';
 import graphcms from '../graphCMS/graphCMS';
 import Category from '../models/category';
 import Item from '../models/item';
-import { firebase } from '../firebase/services';
+
+import checkAndReadFile from '../functions/checkAndReadFile';
+
 
 const AuthContext = createContext();
 
@@ -30,6 +32,19 @@ query MyQuery {
 export const ContextProvider = ({ children }) => {
 
     const getData = async () => {
+
+        const data = await checkAndReadFile();
+        if (!data) {
+            return;
+        }
+        setAuth(data.auth);
+        setCart(data.cart);
+        setAllData(data);
+        setOrders(data.orders)
+        setFavoriteItems(data.favoriteItems)
+        setWeeklyDeals(data.weeklyDeals)
+
+
         const { varieties } = await graphcms.request(QUERY);
         const items = varieties.map(varieties => {
             return (
@@ -48,30 +63,14 @@ export const ContextProvider = ({ children }) => {
                 )
             )
         })
-        setItems(items)
-        setSavedItems(items)
-    };
 
-    const readAuth = () => {
-        firebase.database().ref('auth/').on('value', function (snapshot) {
-            const response = snapshot.val();
-            if (!response) return;
-            const allUsers = [];
-            Object.keys(response).forEach(id => {
-                const data = response[id];
-                allUsers.push({
-                    id,
-                    ...data
-                })
-            })
-            setAllUsers(allUsers)
-            console.log('new', allUsers)
-        })
-    }
+        setItems({ lastId: 98989, categories: items })
+        setSavedItems({ lastId: 98989, categories: items })
+    };
 
     useEffect(() => {
         getData();
-        readAuth();
+
     }, []);
 
     const [auth, setAuth] = useState(template.auth);
@@ -86,8 +85,16 @@ export const ContextProvider = ({ children }) => {
 
     const [allData, setAllData] = useState(template);
 
-    const [items, setItems] = useState([]);
-    const [savedItems, setSavedItems] = useState([]);
+    const [items, setItems] = useState({
+        lastId: 16,
+        categories: []
+    });
+
+    const [savedItems, setSavedItems] = useState({
+        lastId: 16,
+        categories: []
+    });
+
 
     const [priceFilter, setPriceFilter] = useState('nothing');
 

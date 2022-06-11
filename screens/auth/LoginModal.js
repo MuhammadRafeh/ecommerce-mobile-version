@@ -46,14 +46,18 @@ const LoginModal = props => {
                 <View style={{ marginBottom: 10 }}>
                     <Text style={{ fontWeight: 'bold', fontSize: 20, color: 'black' }}>
                         {
-                            fromTailor ? 'Welcome Tailor' : 'Welcome back'
+
+                            fromAdmin ? 'Welcome Tailor' : 'Welcome back'
+
                         }
                     </Text>
                 </View>
                 <View style={{ marginBottom: 30 }}>
                     <Text style={{ letterSpacing: -0.2, fontSize: 14, color: 'grey' }} adjustsFontSizeToFit={true} numberOfLines={1}>
                         {
-                            fromTailor ? 'Sign in back in order to handle different e-commerce items.' : 'Sign in to e-commerce to pick up exactly where you left off.'
+
+                            fromAdmin ? 'Sign in back in order to handle your different orders.' : "Sign in to AR'S Attire to pick up exactly where you left off."
+
                         }
                     </Text>
                 </View>
@@ -144,11 +148,23 @@ const LoginModal = props => {
                         });
                 }} />
 
-                <TouchableOpacity style={{ marginBottom: 24, alignItems: 'flex-end' }} onPress={() => props.navigation.navigate('Signup', { fromTailor: fromTailor })}>
-                    <Text style={{ color: colors.primary, fontWeight: 'bold' }}>
-                        Create Account
-                    </Text>
-                </TouchableOpacity>
+
+                {
+                    !fromAdmin ? (
+                        <TouchableOpacity style={{ marginBottom: 24, alignItems: 'flex-end' }} onPress={() => props.navigation.navigate('Signup')}>
+                            <Text style={{ color: colors.primary, fontWeight: 'bold' }}>
+                                Create Account
+                            </Text>
+                        </TouchableOpacity>
+                    ) : (
+                        <View style={{ marginBottom: 24, alignItems: 'center', marginLeft: 8 }}>
+                            <Text style={{ color: colors.primary, fontFamily: 'italic' }}>
+                                Tailor! we need your help...
+                            </Text>
+                        </View>
+                    )
+                }
+
 
             </ScrollView>
 
