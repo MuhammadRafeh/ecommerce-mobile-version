@@ -49,7 +49,7 @@ export default function OnBoarding(props) {
                 <View style={{ flex: 1 }}>
                     <View style={styles.circle} />
                     <View>
-                        <Text style={styles.text} numberOfLines={1} adjustsFontSizeToFit={true}>Tailors For</Text>
+                        <Text style={styles.text} numberOfLines={1} adjustsFontSizeToFit={true}>Groceries For</Text>
                     </View>
                     <View style={{ top: -16 }}>
                         <Text style={styles.text} numberOfLines={1} adjustsFontSizeToFit={true}>Everyone</Text>

@@ -4,7 +4,7 @@ import colors from '../../../constants/colors';
 import AddIcon from 'react-native-vector-icons/AntDesign'
 import DeleteIcon from 'react-native-vector-icons/AntDesign'
 import { useEcommerceContext } from '../../../contexts/ContextProvider'
-// import checkAndWriteFile from '../../../functions/checkAndWriteFile'
+import checkAndWriteFile from '../../../functions/checkAndWriteFile'
 import Cart from '../../../models/cart';
 import CartItem from '../../../models/cartItem';
 
@@ -20,7 +20,7 @@ const weeklyDeals = props => {
         }
         setWeeklyDeals(newWeeklyDeals)
         setAllData(newAllData);
-        // await checkAndWriteFile(newAllData);
+        await checkAndWriteFile(newAllData);
     }
     return (
         <View style={styles.screen}>

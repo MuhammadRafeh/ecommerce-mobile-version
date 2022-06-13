@@ -3,11 +3,11 @@ import { Text, View, Image, ScrollView } from 'react-native';
 import Steps from '../../components/UI/Steps';
 import Constants from 'expo-constants';
 import Card from '../../components/UI/Card';
-// import checkAndCreateFolder from '../../functions/checkAndCreateFolder';
+import checkAndCreateFolder from '../../functions/checkAndCreateFolder';
 
 const Login = props => {
     useEffect(() => {
-        // checkAndCreateFolder();
+        checkAndCreateFolder();
     }, [])
     return (
         <View style={{ flex: 1, paddingTop: Constants.statusBarHeight + 20 }}>
@@ -31,33 +31,25 @@ const Login = props => {
 
                         <Steps
                             icon={'ios-document-outline'}
-                            title={'Complete your Profile'}
-                            description={
-                                'Tell about your stiches history and skills to global audience and start earning more.'
-                            }
+                            title={'Register yourself'}
+                            description={'Get register on this platform so then you can shop amazing offers and products.'}
                         />
                         <Steps
                             icon={'paper-plane-outline'}
-                            title={'Deliver your stiched work'}
-                            description={
-                                "We'll deliver offline after you have done with the client's order."
-                            }
+                            title={'Order the product'}
+                            description={"Order your favorite product online through this app with in your area."}
                         />
                         <Steps
                             icon={'cloud-done-outline'}
-                            title={'Get paid'}
-                            description={
-                                "Get your payment through easypaisa or door to door. It's that simple."
-                            }
+                            title={'Take your Order'}
+                            description={"We'll deliver your order at your door steps and make payment door to door."}
                         />
                     </View>
 
                     {/* <Button title={'Continue'} style={{ marginTop: 46 }} onPress={() => props.navigation.navigate('SignupModel', { fromSeller: true })} /> */}
                     <View style={{ flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center', top: -10, marginTop: 60 }}>
-
-                        <Card style={{ width: '44.4%' }} text={'User'} image={require('../../assets/images/user.png')} onPress={() => props.navigation.navigate('Login')} />
-                        <Card style={{ width: '44.4%' }} text={'Tailor'} image={require('../../assets/images/admin.png')} onPress={() => props.navigation.navigate('Login', { fromAdmin: true })} />
-
+                        <Card style={{ width: '44.4%' }} text={'Continue as User'} image={require('../../assets/images/user.png')} onPress={() => props.navigation.navigate('Login')} />
+                        <Card style={{ width: '44.4%' }} text={'Continue as Admin'} image={require('../../assets/images/admin.png')} onPress={() => props.navigation.navigate('Login', { fromAdmin: true })} />
                     </View>
 
                 </ScrollView>

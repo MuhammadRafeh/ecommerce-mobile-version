@@ -3,12 +3,12 @@ import { Text, View, TextInput, StyleSheet, Picker, ScrollView } from 'react-nat
 import Button from '../../../components/UI/Button';
 import colors from '../../../constants/colors';
 import { useEcommerceContext } from '../../../contexts/ContextProvider';
-// import checkAndWriteFile from '../../../functions/checkAndWriteFile';
+import checkAndWriteFile from '../../../functions/checkAndWriteFile';
 import generateID from '../../../functions/generateId';
 import weeklyDeal from '../../../models/weeklyDeals';
 
 const AddModifyItems = props => {
-    const { allData, setAllData, weeklyDeals, setWeeklyDeals } = useEcommerceContext();
+    const { allData, setAllData, items, setItems, weeklyDeals, setWeeklyDeals } = useEcommerceContext();
 
     const [name, setName] = useState('')
     const [detail, setDetail] = useState('')
@@ -38,7 +38,7 @@ const AddModifyItems = props => {
             }
             setWeeklyDeals(weeklyDealsData)
             setAllData(newAllData);
-            // await checkAndWriteFile(newAllData);
+            await checkAndWriteFile(newAllData);
             props.navigation.goBack();
 
         }

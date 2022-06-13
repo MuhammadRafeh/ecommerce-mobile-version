@@ -6,7 +6,7 @@ import CartItem from '../../../components/user/orders/CartItem';
 import CartModel from '../../../models/cart';
 import OrderModel from '../../../models/order';
 import CartItemModal from '../../../models/cartItem';
-// import checkAndWriteFile from '../../../functions/checkAndWriteFile';
+import checkAndWriteFile from '../../../functions/checkAndWriteFile';
 import Button from '../../../components/UI/Button';
 import generateID from '../../../functions/generateId';
 import RoundButton from '../../../components/UI/RoundButtton';
@@ -62,7 +62,7 @@ const Cart = props => {
             ...allData,
             cart: newCart
         }
-        // await checkAndWriteFile(newData);
+        await checkAndWriteFile(newData);
         setAllData(newData)
 
     }
@@ -81,7 +81,7 @@ const Cart = props => {
             ...allData,
             cart: cartDuplicate
         };
-        // await checkAndWriteFile(newFileData);
+        await checkAndWriteFile(newFileData);
         setAllData(newFileData);
     }
 
@@ -121,7 +121,7 @@ const Cart = props => {
             cart: cartDuplicate,
             orders: newOrders
         };
-        // await checkAndWriteFile(newFileData);
+        await checkAndWriteFile(newFileData);
         setAllData(newFileData);
     }
 

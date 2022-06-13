@@ -8,11 +8,11 @@ import colors from '../../constants/colors';
 import { useEcommerceContext } from '../../contexts/ContextProvider';
 import GoogleSignin from './GoogleSignin'
 import FacebookSignin from './FacebookSignin'
-import { firebase } from '../../firebase/services';
+import checkAndWriteFile from '../../functions/checkAndWriteFile';
 
 const LoginModal = props => {
-    const { setAuth, auth, allData, setAllData, isAuth, setIsAuth, allUsers, setWhoIsLogin } = useEcommerceContext();
-    const fromTailor = props?.route?.params?.fromTailor;
+    const { setAuth, auth, allData, setAllData } = useEcommerceContext();
+    const fromAdmin = props?.route?.params?.fromAdmin;
     const [selected, setSelected] = useState('no');
     const [usernameOrEmail, setUsernameOrEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -46,35 +46,35 @@ const LoginModal = props => {
                 <View style={{ marginBottom: 10 }}>
                     <Text style={{ fontWeight: 'bold', fontSize: 20, color: 'black' }}>
                         {
-
-                            fromAdmin ? 'Welcome Tailor' : 'Welcome back'
-
+                            fromAdmin ? 'Welcome Admin' : 'Welcome back'
                         }
                     </Text>
                 </View>
-                <View style={{ marginBottom: 30 }}>
+                <View style={{ marginBottom: fromAdmin ? 90 : 30 }}>
                     <Text style={{ letterSpacing: -0.2, fontSize: 14, color: 'grey' }} adjustsFontSizeToFit={true} numberOfLines={1}>
                         {
-
-                            fromAdmin ? 'Sign in back in order to handle your different orders.' : "Sign in to AR'S Attire to pick up exactly where you left off."
-
+                            fromAdmin ? 'Sign in back in order to handle different e-commerce items.' : 'Sign in to e-commerce to pick up exactly where you left off.'
                         }
                     </Text>
                 </View>
+                {
+                    !fromAdmin && (
+                        <>
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
+                                <FacebookSignin navigation={props.navigation} />
 
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
-                    <FacebookSignin navigation={props.navigation} />
+                                <GoogleSignin navigation={props.navigation} />
 
-                    <GoogleSignin navigation={props.navigation} />
+                            </View>
 
-                </View>
-
-                <View style={{ alignItems: 'center', marginBottom: 20 }}>
-                    <Text style={{ letterSpacing: -0.2, fontSize: 14, color: 'grey' }}>
-                        or sign in with email
-                    </Text>
-                </View>
-
+                            <View style={{ alignItems: 'center', marginBottom: 20 }}>
+                                <Text style={{ letterSpacing: -0.2, fontSize: 14, color: 'grey' }}>
+                                    or sign in with email
+                                </Text>
+                            </View>
+                        </>
+                    )
+                }
 
                 <View style={{ marginBottom: 40 }}>
                     <TextInput
@@ -119,35 +119,59 @@ const LoginModal = props => {
                 }
 
                 <Button normalText title={'Continue'} style={{ marginBottom: 20, borderRadius: 8 }} onPress={async () => {
-                    setIsLoading(true)
-                    firebase.auth().signInWithEmailAndPassword(usernameOrEmail, password)
-                        .then((object) => {
-                            if (!object.user.emailVerified) {
-                                alert('Please verify your email!')
-                                object.user.sendEmailVerification();
-                                firebase.auth().signOut();
-                                setIsLoading(false);
-                                return
-                            }
-                            // dispatch(authenticate(object.user.uid, email.toLowerCase(), false, false))
-                            const index = allUsers.findIndex(item => item.uid == object.user.uid);
-                            if (index == -1) return;
+                    setIsLoading(true);
+                    const users = auth.users;
+                    const admin = auth.admin;
 
-                            setWhoIsLogin(0);
+                    let loginEmail = ''
+                    let loginUsername = ''
+                    let loginPassword = ''
 
-                            if (allUsers[index]?.who == 1) {
-                                setWhoIsLogin(1)
-                            }
-
-                            setIsAuth(false)
+                    if (fromAdmin) {
+                        if (!((admin.email.trim() == usernameOrEmail.trim() || admin.username.trim() == usernameOrEmail.trim()) && (admin.password.trim() == password.trim()))) {
+                            setIsIncorrect(true);
                             setIsLoading(false);
-                        })
-                        .catch(error => {
-                            alert(error.message)
+                            return;
+                        }
+                        loginEmail = admin.email;
+                        loginUsername = admin.username;
+                        loginPassword = admin.password
+                    } else {
+                        const indexOfUser = users.findIndex(user => (user.email.trim() == usernameOrEmail.trim() || user.username.trim() == usernameOrEmail.trim()) && (user.password.trim() == password.trim()));
+                        if (indexOfUser == -1) {
                             setIsLoading(false);
-                        });
+                            setIsIncorrect(true);
+                            return;
+                        }
+                        const user = users[indexOfUser];
+                        loginEmail = user.email
+                        loginUsername = user.username
+                        loginPassword = user.password
+                    }
+                    setIsLoading(false);
+                    props.navigation.popToTop();
+                    props.navigation.replace('DrawerCartStackNavigator')
+                    const newAuth = {
+                        ...auth,
+                        whoIsLogin: fromAdmin ? 'admin' : 'user',
+                        loginUserInfo: {
+                            email: loginEmail.trim(),
+                            username: loginUsername.trim(),
+                            password: loginPassword.trim(),
+                            loginFromWhere: 'app'
+                        }
+                    };
+                    setAllData({
+                        ...allData,
+                        auth: newAuth
+                    })
+                    setAuth(newAuth)  //TODO
+                    await checkAndWriteFile({
+                        ...allData,
+                        auth: newAuth
+                    })
+
                 }} />
-
 
                 {
                     !fromAdmin ? (
@@ -159,12 +183,11 @@ const LoginModal = props => {
                     ) : (
                         <View style={{ marginBottom: 24, alignItems: 'center', marginLeft: 8 }}>
                             <Text style={{ color: colors.primary, fontFamily: 'italic' }}>
-                                Tailor! we need your help...
+                                Admin! we need your help...
                             </Text>
                         </View>
                     )
                 }
-
 
             </ScrollView>
 

@@ -3,7 +3,7 @@ import { Text, ScrollView, View, StyleSheet } from 'react-native';
 import OrderItem from '../../../components/user/orders/OderItem';
 import colors from '../../../constants/colors';
 import { useEcommerceContext } from '../../../contexts/ContextProvider';
-// import checkAndWriteFile from '../../../functions/checkAndWriteFile';
+import checkAndWriteFile from '../../../functions/checkAndWriteFile';
 
 const ManageOrders = props => {
 
@@ -24,7 +24,7 @@ const ManageOrders = props => {
 
         setOrders(newOrders);
         setAllData(newData);
-        // await checkAndWriteFile(newData)
+        await checkAndWriteFile(newData)
 
     }
 
@@ -42,7 +42,7 @@ const ManageOrders = props => {
 
         setOrders(newOrders);
         setAllData(newData);
-        // await checkAndWriteFile(newData)
+        await checkAndWriteFile(newData)
 
     }
 

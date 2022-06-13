@@ -3,7 +3,7 @@ import { Text, View, TextInput, StyleSheet } from 'react-native';
 import Button from '../../../components/UI/Button';
 import colors from '../../../constants/colors';
 import { useEcommerceContext } from '../../../contexts/ContextProvider';
-// import checkAndWriteFile from '../../../functions/checkAndWriteFile';
+import checkAndWriteFile from '../../../functions/checkAndWriteFile';
 import generateID from '../../../functions/generateId';
 import Item from '../../../models/item'
 import { Picker } from '@react-native-picker/picker'
@@ -42,13 +42,13 @@ const AddModifyItems = props => {
                 category
                 // []   
             }
-            const copyCategories = [...items];
+            const copyCategories = [...items.categories];
 
             const indexOfCategory = copyCategories.findIndex(cat => cat.name == category);
 
             copyCategories[indexOfCategory].items.push(new Item(UID, name, detail, parseFloat(price), imageUri, []));
 
-            const copyItems = [ ...items, ...copyCategories ];
+            const copyItems = { ...items, categories: copyCategories };
 
             setItems(copyItems);
 
@@ -59,7 +59,7 @@ const AddModifyItems = props => {
 
             setAllData(newAllData);
 
-            // await checkAndWriteFile(newAllData);
+            await checkAndWriteFile(newAllData);
             props.navigation.goBack();
 
         }
@@ -91,7 +91,7 @@ const AddModifyItems = props => {
 
         setAllData(newAllData);
 
-        // await checkAndWriteFile(newAllData);
+        await checkAndWriteFile(newAllData);
         props.navigation.goBack();
     }
 
@@ -166,7 +166,7 @@ const AddModifyItems = props => {
                         isEdit ? (
                             <Picker.Item label={categoryParameter} value={categoryParameter} />
                         ) : (
-                            items.map((item, index) => (
+                            items.categories.map((item, index) => (
                                 <Picker.Item label={item.name} value={item.name} key={index} />
                             ))
                         )

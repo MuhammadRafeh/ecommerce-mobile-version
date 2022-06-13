@@ -1,38 +1,12 @@
 import React, { useState, createContext, useContext, useEffect } from 'react';
+import checkAndReadFile from '../functions/checkAndReadFile';
 import { items as defaultItems } from '../data/items';
 import template from '../template/initialTemplate';
-import { gql } from 'graphql-request';
-import graphcms from '../graphCMS/graphCMS';
-import Category from '../models/category';
-import Item from '../models/item';
-
-import checkAndReadFile from '../functions/checkAndReadFile';
-
 
 const AuthContext = createContext();
 
-const QUERY = gql`
-query MyQuery {
-  varieties {
-    id
-    name
-    products {
-      id
-      image {
-        id
-        url
-      }
-      name
-      price
-      excerpt
-    }
-  }
-}`;
-
 export const ContextProvider = ({ children }) => {
-
-    const getData = async () => {
-
+    const fetchData = async () => {
         const data = await checkAndReadFile();
         if (!data) {
             return;
@@ -42,37 +16,12 @@ export const ContextProvider = ({ children }) => {
         setAllData(data);
         setOrders(data.orders)
         setFavoriteItems(data.favoriteItems)
+        setItems(data.items)
         setWeeklyDeals(data.weeklyDeals)
-
-
-        const { varieties } = await graphcms.request(QUERY);
-        const items = varieties.map(varieties => {
-            return (
-                new Category(
-                    varieties.name,
-                    varieties.products.map(product => (
-                        new Item(
-                            product.id,
-                            product.name,
-                            product.excerpt,
-                            product.price,
-                            product?.image?.url,
-                            []
-                        )
-                    ))
-                )
-            )
-        })
-
-        setItems({ lastId: 98989, categories: items })
-        setSavedItems({ lastId: 98989, categories: items })
-    };
-
+    }
     useEffect(() => {
-        getData();
-
-    }, []);
-
+        fetchData();
+    }, [])
     const [auth, setAuth] = useState(template.auth);
 
     const [cart, setCart] = useState([]);
@@ -87,25 +36,18 @@ export const ContextProvider = ({ children }) => {
 
     const [items, setItems] = useState({
         lastId: 16,
-        categories: []
+        categories: defaultItems
     });
 
     const [savedItems, setSavedItems] = useState({
         lastId: 16,
-        categories: []
+        categories: defaultItems
     });
-
 
     const [priceFilter, setPriceFilter] = useState('nothing');
 
-    // New
-
-    const [allUsers, setAllUsers] = useState([])
-    const [isAuth, setIsAuth] = useState(true);
-    const [whoIsLogin, setWhoIsLogin] = useState(0); // customer | tailor
-
     return (
-        <AuthContext.Provider value={{ allUsers, setAllUsers, whoIsLogin, setWhoIsLogin, isAuth, setIsAuth, priceFilter, setPriceFilter, savedItems, setSavedItems, weeklyDeals, setWeeklyDeals, items, setItems, auth, setAuth, cart, setCart, allData, setAllData, orders, setOrders, favoriteItems, setFavoriteItems }}>
+        <AuthContext.Provider value={{ priceFilter, setPriceFilter, savedItems, setSavedItems, weeklyDeals, setWeeklyDeals, items, setItems, auth, setAuth, cart, setCart, allData, setAllData, orders, setOrders, favoriteItems, setFavoriteItems }}>
             {children}
         </AuthContext.Provider>
     )
